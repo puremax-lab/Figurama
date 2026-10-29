@@ -22,8 +22,8 @@
                 {% set star = featured|first %}
                 {% set second = featured[1] %}
                 <div class="hero-composition">
-                    <span class="blob blob-rose" aria-hidden="true"></span>
-                    <span class="blob blob-sage" aria-hidden="true"></span>
+                    <span class="blob blob-blue" aria-hidden="true"></span>
+                    <span class="blob blob-sand" aria-hidden="true"></span>
                     <div class="hero-photo"><img src="{{ star.imageUrl|replace({'w=900': 'w=1100'}) }}" alt="{{ star.name }}" width="800" height="1000"></div>
                     <a href="{{ path('app_product', {slug: second.slug}) }}" class="hero-round"><img src="{{ second.imageUrl|replace({'w=900': 'w=500'}) }}" alt="{{ second.name }}" width="300" height="300"></a>
                     <a href="{{ path('app_product', {slug: star.slug}) }}" class="hero-note">
@@ -38,7 +38,7 @@
     </section>
 
     {# Scrolling band #}
-    <div class="band band-rose marquee" aria-hidden="true">
+    <div class="band band-mist marquee" aria-hidden="true">
         <div class="marquee-track">
             {% for i in 1..2 %}
                 {% for item in categories %}<span>{{ item.category.name }}</span><span class="dot">✦</span>{% endfor %}

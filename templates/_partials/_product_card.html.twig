@@ -4,7 +4,7 @@
         {% if product.stock == 0 %}
             <span class="stamp">Épuisé</span>
         {% elseif product.featured and not (hide_featured ?? false) %}
-            <span class="stamp stamp-rose">Coup de cœur</span>
+            <span class="stamp stamp-accent">Coup de cœur</span>
         {% endif %}
         <span class="plate-hover" aria-hidden="true">Voir la pièce</span>
     </div>

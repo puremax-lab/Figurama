@@ -12,7 +12,7 @@ Online shop for collectible figurines, built with **Symfony 7.4**: catalogue, ca
 
 ## The idea
 
-A small, quiet boutique rather than a busy marketplace: cream background, beige and powder pink, a serif for titles (Cormorant Garamond) and a light sans-serif for the rest (Jost), with plenty of space around the photos. Soft washes of pink and sage, wavy bands and a dark cocoa footer add depth; sections fade in while scrolling, the hero photos float gently, and the figures of the workshop count up (all turned off when the visitor prefers reduced motion). Each piece still has its technical details (reference, height, scale, material), shown in a simple list on its page.
+A small, quiet boutique rather than a busy marketplace, coloured like a collector's display case: cool cream, mist blue and slate, with brass accents, a serif for titles (Cormorant Garamond) and a light sans-serif for the rest (Jost), with plenty of space around the photos. Soft washes of blue and sand, wavy bands and a slate footer add depth; sections fade in while scrolling, the hero photos float gently, and the figures of the workshop count up (all turned off when the visitor prefers reduced motion). Each piece still has its technical details (reference, height, scale, material), shown in a simple list on its page.
 
 ## What you can do
 
