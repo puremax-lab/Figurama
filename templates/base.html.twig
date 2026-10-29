@@ -34,7 +34,7 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link {{ app.current_route == 'app_shop' ? 'active' }}" href="{{ path('app_shop') }}">Catalogue</a></li>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item"><a class="nav-link {{ app.current_route starts with 'admin' ? 'active' }}" href="{{ path('admin_dashboard') }}">Atelier</a></li>
+                    <li class="nav-item"><a class="nav-link {{ app.current_route starts with 'admin' ? 'active' }}" href="{{ path('admin_dashboard') }}">Gestion</a></li>
                 {% endif %}
             </ul>
             <form action="{{ path('app_shop') }}" method="get" class="header-search my-3 my-md-0 me-md-3" role="search">
@@ -77,13 +77,14 @@
     <div class="container py-4 d-flex flex-column flex-md-row justify-content-between gap-3">
         <div>
             <a class="footer-brand" href="{{ path('app_home') }}">FIGURAMA</a>
-            <p class="mb-0 mt-1">PROJET PORTFOLIO · SYMFONY 7.4, DOCTRINE, BOOTSTRAP, STRIPE</p>
+            <p class="mb-0 mt-1">PROJET PORTFOLIO DE PUREMAX-LAB</p>
             <p class="mb-0">BOUTIQUE DE DÉMONSTRATION · AUCUN COLIS N'EST EXPÉDIÉ · PHOTOS UNSPLASH</p>
         </div>
         <nav class="footer-links d-flex flex-wrap align-items-md-end gap-3" aria-label="Liens du pied de page">
             <a href="{{ path('app_shop') }}">Catalogue</a>
             <a href="https://github.com/puremax-lab/Figurama" target="_blank" rel="noopener">Code source ↗</a>
             <a href="https://github.com/puremax-lab" target="_blank" rel="noopener">GitHub puremax-lab ↗</a>
+            <a href="{{ path('app_legal') }}">Mentions légales</a>
             <span>© {{ 'now'|date('Y') }}</span>
         </nav>
     </div>

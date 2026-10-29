@@ -25,17 +25,7 @@
         </div>
     </section>
 
-    <h2 class="section-title"><span class="num">02</span> Index des séries</h2>
-    <div>
-        {% for item in categories %}
-            <a href="{{ path('app_shop', {categorie: item.category.slug}) }}" class="index-link">
-                <span><span class="code">{{ item.category.code }}</span><strong>{{ item.category.name }}</strong></span>
-                <span class="text-muted-blue">{{ item.products }} pièces →</span>
-            </a>
-        {% endfor %}
-    </div>
-
-    <h2 class="section-title"><span class="num">03</span> Sélection de l'atelier</h2>
+    <h2 class="section-title">Sélection du moment</h2>
     <div class="row row-cols-2 row-cols-lg-4 g-4">
         {% for product in featured %}
             <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>

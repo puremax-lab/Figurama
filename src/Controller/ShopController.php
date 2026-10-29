@@ -100,4 +100,10 @@ final class ShopController extends AbstractController
             'review_form' => $form,
         ], new Response(status: $form?->isSubmitted() ? 422 : 200));
     }
+
+    #[Route('/mentions-legales', name: 'app_legal', methods: ['GET'])]
+    public function legal(): Response
+    {
+        return $this->render('shop/legal.html.twig');
+    }
 }

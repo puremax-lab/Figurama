@@ -24,6 +24,7 @@ Figurines are scale models, so the shop looks like an engineering drawing (blue 
 - Product page with a technical sheet and verified reviews
 - Checkout with **Stripe Checkout** (test mode), or a built-in demo payment when no Stripe key is set
 - Order history, pay later, cancel an unpaid order
+- Legal notice page (publisher, host, personal data)
 
 **Admin**
 - Dashboard: revenue, orders to ship, low stock
@@ -38,6 +39,17 @@ Figurines are scale models, so the shop looks like an engineering drawing (blue 
 - **Verified reviews**: only customers whose order was delivered can review a piece, once.
 - **Quick add and infinite scroll** in plain JavaScript ([`app.js`](assets/app.js)): the server returns JSON or HTML fragments, and everything still works without JavaScript.
 - **Security**: CSRF tokens, login throttling, hashed passwords, and a voter so customers only see their own orders.
+
+## Stack and quality
+
+| | |
+|---|---|
+| Back end | PHP 8.2+, Symfony 7.4 LTS, Doctrine ORM, Twig |
+| Database | SQLite |
+| Front end | Bootstrap 5, plain JavaScript, AssetMapper (no Node.js build) |
+| Payment | Stripe Checkout through Symfony HttpClient |
+| Tests | 43 PHPUnit tests, run on every push with GitHub Actions |
+| Hosting | alwaysdata, served from a sub-folder |
 
 ## Screens
 
