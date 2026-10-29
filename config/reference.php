@@ -1261,10 +1261,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     }>,
  *     role_hierarchy?: array<string, Param|string|list<scalar|Param|null>>,
  * }
- * @psalm-type StimulusConfig = array{
- *     controller_paths?: list<scalar|Param|null>,
- *     controllers_json?: scalar|Param|null, // Default: "%kernel.project_dir%/assets/controllers.json"
- * }
  * @psalm-type TwigConfig = array{
  *     form_themes?: list<scalar|Param|null>,
  *     globals?: array<string, array{ // Default: []
@@ -1366,7 +1362,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     doctrine?: DoctrineConfig,
  *     doctrine_migrations?: DoctrineMigrationsConfig,
  *     security?: SecurityConfig,
- *     stimulus?: StimulusConfig,
  *     twig?: TwigConfig,
  *     twig_extra?: TwigExtraConfig,
  *     "when@dev"?: array{
@@ -1377,7 +1372,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
  *         security?: SecurityConfig,
- *         stimulus?: StimulusConfig,
  *         twig?: TwigConfig,
  *         twig_extra?: TwigExtraConfig,
  *         debug?: DebugConfig,
@@ -1391,7 +1385,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
  *         security?: SecurityConfig,
- *         stimulus?: StimulusConfig,
  *         twig?: TwigConfig,
  *         twig_extra?: TwigExtraConfig,
  *     },
@@ -1403,7 +1396,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
  *         security?: SecurityConfig,
- *         stimulus?: StimulusConfig,
  *         twig?: TwigConfig,
  *         twig_extra?: TwigExtraConfig,
  *     },
