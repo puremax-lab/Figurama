@@ -12,13 +12,15 @@ Online shop for collectible figurines, built with **Symfony 7.4**: catalogue, ca
 
 ## The idea
 
-A small, quiet boutique rather than a busy marketplace, coloured like a collector's display case: cool cream, mist blue and slate, with brass accents, a serif for titles (Cormorant Garamond) and a light sans-serif for the rest (Jost), with plenty of space around the photos. Soft washes of blue and sand, wavy bands and a slate footer add depth; sections fade in while scrolling, the hero photos float gently, and the figures of the workshop count up (all turned off when the visitor prefers reduced motion). Each piece still has its technical details (reference, height, scale, material), shown in a simple list on its page.
+Figurines are scale models, so the shop is designed like an **engineering drawing**: blue gridded paper, monospaced text, a reference code for every piece (`FAN-001`), dimension lines on the photos and a technical sheet with height, scale and material. On top of that, a touch of **convention fanzine**: prices are tilted stickers, out-of-stock items get a red rubber stamp, buttons have hard shadows.
+
+The cart is called a *bon de commande* (order form), the back office *l'atelier* (the workshop).
 
 ## What you can do
 
 **As a customer**
 - Browse the catalogue by series, search, sort by price, hide out-of-stock pieces; more pieces load automatically while scrolling
-- Read the details of each piece and add it to the cart (never more than the stock)
+- Read a technical sheet for each piece and add it to the order form (never more than the stock)
 - Enter a shipping address and pay with **Stripe Checkout** (test cards), or with the built-in demo payment when no Stripe key is set
 - Follow your orders, pay later or cancel an unpaid order
 
@@ -36,11 +38,11 @@ A small, quiet boutique rather than a busy marketplace, coloured like a collecto
 - **Stripe without the SDK** ([`StripeClient`](src/Payment/StripeClient.php)): Checkout sessions created with Symfony HttpClient, payment checked again when the customer comes back, and a webhook whose **signature is verified** (HMAC-SHA256, 5-minute tolerance). Marking an order as paid is idempotent, because Stripe may send the same event twice.
 - **Infinite scroll without a library** ([`app.js`](assets/app.js)): an `IntersectionObserver` fetches the next page when the "load more" link gets close, and the controller returns only the new cards. Without JavaScript, the link simply opens the next page.
 - **Security**: login throttling, hashed passwords, CSRF tokens on every form that changes data, and a **voter** ([`OrderVoter`](src/Security/OrderVoter.php)) so customers only see their own orders.
-- **Front end**: Bootstrap provides the grid and base components, but the whole look comes from a single hand-written stylesheet ([`app.css`](assets/styles/app.css)) with Cormorant Garamond and Jost.
+- **Front end**: Bootstrap provides the grid and base components, but the whole look comes from a single hand-written stylesheet ([`app.css`](assets/styles/app.css)) with IBM Plex Mono and Archivo Black.
 
 ## Screens
 
-| Product page | Cart |
+| Product sheet | Order form |
 |---|---|
 | ![Product](docs/screenshots/product.png) | ![Cart](docs/screenshots/cart.png) |
 

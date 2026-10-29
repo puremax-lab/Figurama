@@ -16,22 +16,22 @@
 
     <div class="row g-4">
         <div class="col-lg-7">
-            <h2 class="section-title text-start mt-0 fs-3">À expédier</h2>
+            <h2 class="section-title mt-0"><span class="num">01</span> À expédier</h2>
             {% if to_ship is empty %}
-                <p class="text-soft">Rien à expédier pour le moment.</p>
+                <p class="text-muted-blue">Rien à expédier pour le moment.</p>
             {% else %}
                 {% for order in to_ship %}
                     <a href="{{ path('admin_order', {reference: order.reference}) }}" class="index-link">
-                        <span><span class="code">{{ order.reference }}</span>{{ order.customer.fullName }} · {{ order.itemCount }} article{{ order.itemCount > 1 ? 's' }}</span>
+                        <span><span class="code">{{ order.reference }}</span>{{ order.customer.fullName }} · {{ order.itemCount }} pièce{{ order.itemCount > 1 ? 's' }}</span>
                         <span class="text-nowrap">{{ order.totalCents|price }}</span>
                     </a>
                 {% endfor %}
             {% endif %}
         </div>
         <div class="col-lg-5">
-            <h2 class="section-title text-start mt-0 fs-3">Stock faible</h2>
+            <h2 class="section-title mt-0"><span class="num">02</span> Stock faible</h2>
             {% if low_stock is empty %}
-                <p class="text-soft">Tout est bien approvisionné.</p>
+                <p class="text-muted-blue">Tout est bien approvisionné.</p>
             {% else %}
                 {% for product in low_stock %}
                     <a href="{{ path('admin_product_edit', {id: product.id}) }}" class="index-link">

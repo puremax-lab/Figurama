@@ -21,8 +21,6 @@ final class ShopController extends AbstractController
         return $this->render('shop/home.html.twig', [
             'featured' => $products->featured(4),
             'categories' => $categories->withProductCount(),
-            'covers' => $products->coverImages(),
-            'workshop' => $products->findOneBy(['name' => 'Mannequin d\'atelier']),
         ]);
     }
 

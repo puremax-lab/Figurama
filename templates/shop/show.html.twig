@@ -6,75 +6,56 @@
 {% block body %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ path('app_shop') }}">Boutique</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_shop') }}">Catalogue</a></li>
             <li class="breadcrumb-item"><a href="{{ path('app_shop', {categorie: product.category.slug}) }}">{{ product.category.name }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.reference }}</li>
         </ol>
     </nav>
 
     <div class="row g-4 g-lg-5 mb-5">
         <div class="col-md-6">
-            <div class="figure-photo">
-                <img src="{{ product.imageUrl|replace({'w=900': 'w=1200'}) }}" alt="{{ product.name }}" width="900" height="1125">
-                {% if product.stock == 0 %}<span class="stamp">Épuisé</span>{% endif %}
+            <div class="plate">
+                <header class="plate-head"><span>{{ product.reference }}</span><span>VUE DE FACE</span></header>
+                <div class="figure-photo">
+                    <img src="{{ product.imageUrl|replace({'w=900': 'w=1200'}) }}" alt="{{ product.name }}" width="900" height="900">
+                    <div class="dim-v" aria-hidden="true"><span>{{ product.heightCm }} cm</span></div>
+                    {% if product.stock == 0 %}<span class="stamp">Épuisé</span>{% endif %}
+                </div>
             </div>
         </div>
-        <div class="col-md-6 col-lg-5 offset-lg-1">
-            <p class="eyebrow mb-2">{{ product.category.name }}</p>
+        <div class="col-md-6">
+            <p class="eyebrow mb-2">Série {{ product.category.code }} · {{ product.category.name }}</p>
             <h1>{{ product.name }}</h1>
-            <p class="price-big my-3">{{ product.priceCents|price }}</p>
-            <p class="text-soft" style="line-height: 1.8">{{ product.description }}</p>
+            <p class="my-4"><span class="sticker sticker-big">{{ product.priceCents|price }}</span></p>
+            <p>{{ product.description }}</p>
+
+            <div class="cartouche my-4">
+                <div class="cartouche-head"><span>Fiche technique</span><span>{{ product.reference }}</span></div>
+                <dl>
+                    <dt>Hauteur</dt><dd>{{ product.heightCm }} cm</dd>
+                    <dt>Échelle</dt><dd>{{ product.scale }}</dd>
+                    <dt>Matière</dt><dd>{{ product.material }}</dd>
+                    <dt>Stock</dt><dd>{{ product.stock == 0 ? 'épuisé' : product.stock ~ ' pièce' ~ (product.stock > 1 ? 's') }}</dd>
+                </dl>
+            </div>
 
             {% if product.available %}
-                {% if product.lowStock %}<p class="stock-note mb-2">Plus que {{ product.stock }} en stock</p>{% endif %}
-                <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="d-flex flex-wrap gap-3 align-items-end my-4">
+                <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="d-flex flex-wrap gap-3 align-items-end">
                     <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
                     <div>
                         <label for="quantity" class="form-label">Quantité</label>
                         <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ min(product.stock, 10) }}" class="form-control qty-input">
                     </div>
-                    <button class="btn btn-primary btn-lg flex-grow-1">Ajouter au panier</button>
+                    <button class="btn btn-primary btn-lg flex-grow-1">Ajouter au bon de commande</button>
                 </form>
             {% else %}
-                <p class="my-4 text-soft">Cette pièce reviendra bientôt en stock.</p>
+                <p class="text-muted-blue">Cette pièce reviendra bientôt en stock.</p>
             {% endif %}
-
-            <div class="cartouche">
-                <div class="cartouche-head"><span>Détails</span><span>Réf. {{ product.reference }}</span></div>
-                <dl>
-                    <dt>Hauteur</dt><dd>{{ product.heightCm }} cm</dd>
-                    <dt>Échelle</dt><dd>{{ product.scale }}</dd>
-                    <dt>Matière</dt><dd>{{ product.material }}</dd>
-                    <dt>Disponibilité</dt><dd>{{ product.stock == 0 ? 'épuisé' : product.stock ~ ' pièce' ~ (product.stock > 1 ? 's') }}</dd>
-                </dl>
-            </div>
-
-            <div class="mini-promises">
-                <span>{{ include('_partials/_icon.html.twig', {name: 'truck'}) }} Livraison offerte</span>
-                <span>{{ include('_partials/_icon.html.twig', {name: 'return'}) }} Retour 30 jours</span>
-                <span>{{ include('_partials/_icon.html.twig', {name: 'lock'}) }} Paiement Stripe</span>
-            </div>
-
-            {# Native <details>: opens and closes without JavaScript #}
-            <div class="accordion-soft">
-                <details>
-                    <summary>Livraison</summary>
-                    <p>Expédiée sous 48 h dans une boîte rigide, avec papier de soie. Livraison offerte en Belgique, France, Luxembourg et aux Pays-Bas (2 à 4 jours ouvrés).</p>
-                </details>
-                <details>
-                    <summary>Retours</summary>
-                    <p>Vous avez 30 jours pour changer d'avis. Renvoyez la pièce dans son emballage d'origine, nous vous remboursons à réception.</p>
-                </details>
-                <details>
-                    <summary>Entretien</summary>
-                    <p>Un pinceau doux suffit pour la poussière. Évitez le soleil direct et l'eau, qui peuvent ternir la peinture.</p>
-                </details>
-            </div>
         </div>
     </div>
 
     {% if similar %}
-        <h2 class="section-title">Dans la même collection</h2>
+        <h2 class="section-title"><span class="num">+</span> Même série</h2>
         <div class="row row-cols-2 row-cols-lg-4 g-4">
             {% for product in similar %}
                 <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>

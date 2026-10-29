@@ -1,17 +1,12 @@
 <article class="plate">
+    <span class="sticker">{{ product.priceCents|price }}</span>
+    <header class="plate-head"><span>{{ product.reference }}</span></header>
     <div class="figure-photo">
-        <img src="{{ product.imageUrl }}" alt="{{ product.name }}" loading="lazy" width="600" height="750">
-        {% if product.stock == 0 %}
-            <span class="stamp">Épuisé</span>
-        {% elseif product.featured and not (hide_featured ?? false) %}
-            <span class="stamp stamp-accent">Coup de cœur</span>
-        {% endif %}
-        <span class="plate-hover" aria-hidden="true">Voir la pièce</span>
+        <img src="{{ product.imageUrl }}" alt="{{ product.name }}" loading="lazy" width="600" height="600">
+        <div class="dim-v" aria-hidden="true"><span>{{ product.heightCm }} cm</span></div>
+        {% if product.stock == 0 %}<span class="stamp">Épuisé</span>{% endif %}
     </div>
-    <p class="plate-category">{{ product.category.name }} · {{ product.heightCm }} cm</p>
+    {% if product.lowStock %}<span class="sticker sticker-white plate-low">Plus que {{ product.stock }}</span>{% endif %}
     <h3 class="plate-title"><a href="{{ path('app_product', {slug: product.slug}) }}" class="stretched-link">{{ product.name }}</a></h3>
-    <div class="plate-meta">
-        <span class="price">{{ product.priceCents|price }}</span>
-        {% if product.lowStock %}<span class="stock-note">Plus que {{ product.stock }}</span>{% endif %}
-    </div>
+    <p class="plate-meta">Éch. {{ product.scale }} · {{ product.material }}</p>
 </article>

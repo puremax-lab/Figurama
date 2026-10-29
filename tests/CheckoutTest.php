@@ -36,7 +36,7 @@ final class CheckoutTest extends AppWebTestCase
         $this->assertSame(4, $this->product('Dragon de rubis')->getStock());
 
         $this->client->request('GET', '/panier');
-        $this->assertSelectorTextContains('main', 'Votre panier est vide.');
+        $this->assertSelectorTextContains('main', 'Aucune pièce n\'a encore été ajoutée.');
     }
 
     public function testShowsErrorsForAnInvalidAddress(): void

@@ -8,9 +8,9 @@
     {{ include('admin/_nav.html.twig') }}
 
     <div class="d-flex flex-nowrap overflow-auto gap-2 mb-4">
-        <a href="{{ path('admin_orders') }}" class="btn btn-sm text-nowrap {{ current_status ? 'btn-outline' : 'btn-primary' }}">Toutes</a>
+        <a href="{{ path('admin_orders') }}" class="btn btn-sm text-nowrap {{ current_status ? 'btn-outline-light' : 'btn-primary' }}">Toutes</a>
         {% for status in enum('App\\Entity\\OrderStatus').cases() %}
-            <a href="{{ path('admin_orders', {statut: status.value}) }}" class="btn btn-sm text-nowrap {{ current_status == status ? 'btn-primary' : 'btn-outline' }}">{{ status.label }} ({{ counts[status.value] }})</a>
+            <a href="{{ path('admin_orders', {statut: status.value}) }}" class="btn btn-sm text-nowrap {{ current_status == status ? 'btn-primary' : 'btn-outline-light' }}">{{ status.label }} ({{ counts[status.value] }})</a>
         {% endfor %}
     </div>
 
@@ -28,7 +28,7 @@
                             <td class="pe-3">{{ include('_partials/_status.html.twig', {status: order.status}) }}</td>
                         </tr>
                     {% else %}
-                        <tr><td colspan="5" class="text-center text-soft py-4">Aucune commande.</td></tr>
+                        <tr><td colspan="5" class="text-center text-muted-blue py-4">Aucune commande.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>

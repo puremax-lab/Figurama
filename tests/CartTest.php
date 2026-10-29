@@ -13,7 +13,7 @@ final class CartTest extends AppWebTestCase
         $crawler = $this->client->request('GET', '/panier');
         $this->assertSelectorTextContains('main', 'Dragon de rubis');
         $this->assertSelectorTextContains('main', '99,80');
-        $this->assertStringContainsString('(2)', $crawler->filter('nav')->text());
+        $this->assertStringContainsString('[2]', $crawler->filter('nav')->text());
     }
 
     public function testNeverPutsMoreThanTheStockInTheCart(): void
@@ -45,7 +45,7 @@ final class CartTest extends AppWebTestCase
 
         $this->client->submit($crawler->selectButton('Mettre à jour')->form(['quantity' => 0]));
         $this->client->followRedirect();
-        $this->assertSelectorTextContains('main', 'Votre panier est vide.');
+        $this->assertSelectorTextContains('main', 'Aucune pièce n\'a encore été ajoutée.');
     }
 
     public function testRefusesCartChangesWithoutCsrfToken(): void
@@ -64,6 +64,6 @@ final class CartTest extends AppWebTestCase
         $this->em->flush();
 
         $this->client->request('GET', '/panier');
-        $this->assertSelectorTextContains('main', 'Votre panier est vide.');
+        $this->assertSelectorTextContains('main', 'Aucune pièce n\'a encore été ajoutée.');
     }
 }

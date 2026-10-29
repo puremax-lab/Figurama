@@ -7,7 +7,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 my-3">
         <div>
             <h1 class="mb-1">{{ order.reference }}</h1>
-            <span class="text-soft">{{ order.customer.fullName }} · {{ order.customer.email }}</span>
+            <span class="text-muted-blue">{{ order.customer.fullName }} · {{ order.customer.email }}</span>
         </div>
         {{ include('_partials/_status.html.twig', {status: order.status}) }}
     </div>

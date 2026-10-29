@@ -7,9 +7,9 @@
         <div class="col-md-8 col-lg-6">
             <p class="eyebrow mb-2">Étape 2 sur 2</p>
             <h1 class="mb-4">Paiement</h1>
-            <div class="panel">
-                <p class="mb-3"><span class="status status-pending">Mode démo</span></p>
-                <p class="mb-1 text-soft">Commande {{ order.reference }}</p>
+            <div class="panel position-relative">
+                <span class="sticker sticker-red hero-sticker">Mode démo</span>
+                <p class="mb-1 text-muted-blue">Commande {{ order.reference }}</p>
                 <p class="display fs-2 mb-3">{{ order.totalCents|price }}</p>
                 <p class="small">Aucune clé Stripe n'est configurée : le paiement est simulé. Avec une clé de test, ce bouton ouvre la vraie page Stripe Checkout.</p>
                 <form method="post" action="{{ path('app_payment_demo', {reference: order.reference}) }}">
