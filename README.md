@@ -3,6 +3,8 @@
 Online shop for collectible figurines built with **Symfony 7.4**: catalogue, cart, Stripe payment, verified reviews and a back office.
 *Boutique en ligne de figurines de collection.*
 
+**[Try the live demo](https://puremax-lab.alwaysdata.net/figurama)**: log in with `client@figurama.test` (customer) or `admin@figurama.test` (back office), password `password`. Payment runs in demo mode, no card needed.
+
 ![Symfony](https://img.shields.io/badge/Symfony-7.4_LTS-000000?logo=symfony)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
 ![Stripe](https://img.shields.io/badge/Stripe-Checkout-635BFF?logo=stripe&logoColor=white)
