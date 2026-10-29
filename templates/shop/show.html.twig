@@ -48,6 +48,28 @@
                     <dt>Disponibilité</dt><dd>{{ product.stock == 0 ? 'épuisé' : product.stock ~ ' pièce' ~ (product.stock > 1 ? 's') }}</dd>
                 </dl>
             </div>
+
+            <div class="mini-promises">
+                <span>{{ include('_partials/_icon.html.twig', {name: 'truck'}) }} Livraison offerte</span>
+                <span>{{ include('_partials/_icon.html.twig', {name: 'return'}) }} Retour 30 jours</span>
+                <span>{{ include('_partials/_icon.html.twig', {name: 'lock'}) }} Paiement Stripe</span>
+            </div>
+
+            {# Native <details>: opens and closes without JavaScript #}
+            <div class="accordion-soft">
+                <details>
+                    <summary>Livraison</summary>
+                    <p>Expédiée sous 48 h dans une boîte rigide, avec papier de soie. Livraison offerte en Belgique, France, Luxembourg et aux Pays-Bas (2 à 4 jours ouvrés).</p>
+                </details>
+                <details>
+                    <summary>Retours</summary>
+                    <p>Vous avez 30 jours pour changer d'avis. Renvoyez la pièce dans son emballage d'origine, nous vous remboursons à réception.</p>
+                </details>
+                <details>
+                    <summary>Entretien</summary>
+                    <p>Un pinceau doux suffit pour la poussière. Évitez le soleil direct et l'eau, qui peuvent ternir la peinture.</p>
+                </details>
+            </div>
         </div>
     </div>
 

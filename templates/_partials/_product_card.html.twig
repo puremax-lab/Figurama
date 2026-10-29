@@ -1,9 +1,14 @@
 <article class="plate">
     <div class="figure-photo">
         <img src="{{ product.imageUrl }}" alt="{{ product.name }}" loading="lazy" width="600" height="750">
-        {% if product.stock == 0 %}<span class="stamp">Épuisé</span>{% endif %}
+        {% if product.stock == 0 %}
+            <span class="stamp">Épuisé</span>
+        {% elseif product.featured and not (hide_featured ?? false) %}
+            <span class="stamp stamp-rose">Coup de cœur</span>
+        {% endif %}
+        <span class="plate-hover" aria-hidden="true">Voir la pièce</span>
     </div>
-    <p class="plate-category">{{ product.category.name }}</p>
+    <p class="plate-category">{{ product.category.name }} · {{ product.heightCm }} cm</p>
     <h3 class="plate-title"><a href="{{ path('app_product', {slug: product.slug}) }}" class="stretched-link">{{ product.name }}</a></h3>
     <div class="plate-meta">
         <span class="price">{{ product.priceCents|price }}</span>

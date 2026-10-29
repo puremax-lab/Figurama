@@ -1,45 +1,113 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {# Hero: text on the left, a composition of photos on the right #}
     <section class="hero row g-5 align-items-center">
         <div class="col-lg-6 order-2 order-lg-1">
-            <p class="eyebrow mb-3">Figurines de collection</p>
-            <h1>Des petites pièces, choisies avec soin.</h1>
+            <p class="eyebrow mb-3"><span class="eyebrow-line"></span>Figurines de collection</p>
+            <h1>Des petites pièces, <em>choisies</em> avec soin.</h1>
             <p class="lead mt-4">Dragons, robots en tôle, astronautes et curiosités. Chaque figurine est peinte à la main, emballée avec attention et envoyée sous 48 heures.</p>
-            <a href="{{ path('app_shop') }}" class="btn btn-primary btn-lg mt-3">Découvrir la boutique</a>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <a href="{{ path('app_shop') }}" class="btn btn-primary btn-lg">Découvrir la boutique</a>
+                <a href="#collections" class="btn btn-outline btn-lg">Les collections</a>
+            </div>
+            <ul class="hero-promises">
+                <li>Peint à la main</li>
+                <li>Livraison offerte</li>
+                <li>Retour 30 jours</li>
+            </ul>
         </div>
-        <div class="col-lg-5 offset-lg-1 order-1 order-lg-2">
-            {% if featured is not empty %}
+        <div class="col-lg-6 order-1 order-lg-2">
+            {% if featured|length >= 2 %}
                 {% set star = featured|first %}
-                <div class="position-relative">
+                {% set second = featured[1] %}
+                <div class="hero-composition">
                     <div class="hero-photo"><img src="{{ star.imageUrl|replace({'w=900': 'w=1100'}) }}" alt="{{ star.name }}" width="800" height="1000"></div>
-                    <a href="{{ path('app_product', {slug: star.slug}) }}" class="hero-note position-absolute bottom-0 start-0 m-3 text-decoration-none text-reset">
+                    <a href="{{ path('app_product', {slug: second.slug}) }}" class="hero-round"><img src="{{ second.imageUrl|replace({'w=900': 'w=500'}) }}" alt="{{ second.name }}" width="300" height="300"></a>
+                    <a href="{{ path('app_product', {slug: star.slug}) }}" class="hero-note">
                         <span class="eyebrow d-block">Coup de cœur</span>
-                        <strong class="d-block" style="font-family: var(--serif); font-size: 1.25rem">{{ star.name }}</strong>
+                        <strong>{{ star.name }}</strong>
                         <span class="text-soft">{{ star.priceCents|price }}</span>
                     </a>
+                    <span class="hero-seal" aria-hidden="true">peint<br>à la main</span>
                 </div>
             {% endif %}
         </div>
     </section>
 
-    <h2 class="section-title">Les collections</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-3">
-        {% for item in categories %}
-            <div class="col">
-                <a href="{{ path('app_shop', {categorie: item.category.slug}) }}" class="category-tile">
-                    <strong>{{ item.category.name }}</strong>
-                    <span>{{ item.products }} figurines</span>
-                </a>
-            </div>
-        {% endfor %}
+    {# Scrolling band #}
+    <div class="band band-rose marquee" aria-hidden="true">
+        <div class="marquee-track">
+            {% for i in 1..2 %}
+                {% for item in categories %}<span>{{ item.category.name }}</span><span class="dot">✦</span>{% endfor %}
+                <span>Peint à la main</span><span class="dot">✦</span><span>Livraison offerte</span><span class="dot">✦</span>
+            {% endfor %}
+        </div>
     </div>
 
-    <h2 class="section-title">Sélection de l'atelier</h2>
-    <p class="section-intro">Les pièces que l'on préfère en ce moment.</p>
-    <div class="row row-cols-2 row-cols-lg-4 g-4">
-        {% for product in featured %}
-            <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>
-        {% endfor %}
-    </div>
+    {# Collections illustrated by one of their pieces #}
+    <section id="collections">
+        <p class="eyebrow text-center mb-2">Trois univers</p>
+        <h2 class="section-title mt-0">Les collections</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for item in categories %}
+                <div class="col">
+                    <a href="{{ path('app_shop', {categorie: item.category.slug}) }}" class="category-tile">
+                        {% if covers[item.category.id] is defined %}
+                            <img src="{{ covers[item.category.id]|replace({'w=900': 'w=700'}) }}" alt="" loading="lazy" width="600" height="750">
+                        {% endif %}
+                        <span class="category-tile-text">
+                            <strong>{{ item.category.name }}</strong>
+                            <span>{{ item.products }} figurines →</span>
+                        </span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# Featured pieces on a beige band #}
+    <section class="band band-beige">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+            <div>
+                <p class="eyebrow mb-2">En ce moment</p>
+                <h2 class="section-title text-start m-0">Sélection de l'atelier</h2>
+            </div>
+            <a href="{{ path('app_shop') }}" class="link-arrow">Toute la boutique →</a>
+        </div>
+        <div class="row row-cols-2 row-cols-lg-4 g-4">
+            {% for product in featured %}
+                <div class="col">{{ include('_partials/_product_card.html.twig', {hide_featured: true}) }}</div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# The workshop story #}
+    <section class="row g-5 align-items-center story">
+        <div class="col-md-5">
+            {% if workshop %}
+                <div class="story-photo"><img src="{{ workshop.imageUrl|replace({'w=900': 'w=900'}) }}" alt="{{ workshop.name }}" loading="lazy" width="700" height="875"></div>
+            {% endif %}
+        </div>
+        <div class="col-md-6 offset-md-1">
+            <p class="eyebrow mb-2">L'atelier</p>
+            <h2 class="section-title text-start mt-0">Petites séries, beaucoup de patience.</h2>
+            <p class="text-soft story-text">Nous choisissons chaque modèle pour son caractère, puis nous le peignons à la main, couche après couche. Les séries restent courtes : quand une pièce est épuisée, elle revient parfois, mais jamais tout à fait pareille.</p>
+            <dl class="story-figures">
+                <div><dt>{{ categories|reduce((sum, item) => sum + item.products, 0) }}</dt><dd>pièces au catalogue</dd></div>
+                <div><dt>{{ categories|length }}</dt><dd>collections</dd></div>
+                <div><dt>48 h</dt><dd>pour expédier</dd></div>
+            </dl>
+        </div>
+    </section>
+
+    {# Promises #}
+    <section class="band band-cream promises">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 text-center">
+            <div class="col">{{ include('_partials/_icon.html.twig', {name: 'brush'}) }}<h3>Peint à la main</h3><p>Chaque pièce est finie à l'atelier, jamais deux fois identique.</p></div>
+            <div class="col">{{ include('_partials/_icon.html.twig', {name: 'truck'}) }}<h3>Livraison offerte</h3><p>En Belgique, France, Luxembourg et aux Pays-Bas, sous 48 h.</p></div>
+            <div class="col">{{ include('_partials/_icon.html.twig', {name: 'gift'}) }}<h3>Emballage soigné</h3><p>Papier de soie et boîte rigide, prêt à offrir.</p></div>
+            <div class="col">{{ include('_partials/_icon.html.twig', {name: 'lock'}) }}<h3>Paiement sécurisé</h3><p>Carte bancaire via Stripe, sans stocker vos données.</p></div>
+        </div>
+    </section>
 {% endblock %}

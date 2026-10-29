@@ -51,6 +51,17 @@ class ProductRepository extends ServiceEntityRepository
         return new Paginator($qb);
     }
 
+    /** @return array<int, string> one photo per category id, used to illustrate the collections */
+    public function coverImages(): array
+    {
+        $covers = [];
+        foreach ($this->findBy(['active' => true], ['featured' => 'DESC', 'priceCents' => 'DESC']) as $product) {
+            $covers[$product->getCategory()->getId()] ??= $product->getImageUrl();
+        }
+
+        return $covers;
+    }
+
     /** @return list<Product> */
     public function featured(int $limit): array
     {

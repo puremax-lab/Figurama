@@ -141,3 +141,105 @@ a { text-underline-offset: 3px; }
 
 .topbar .btn-link.nav-link { font-size: .82rem; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); padding: .5rem 0; }
 .topbar .btn-link.nav-link:hover { color: var(--rose-dark); }
+
+/* =========================================================
+   Richer details: texture, hero composition, bands, story
+   ========================================================= */
+
+/* Very light paper grain on the background */
+body {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .32 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+h1 em, h2 em { font-style: italic; color: var(--rose-dark); }
+.eyebrow-line { display: inline-block; width: 28px; height: 1px; background: currentColor; vertical-align: middle; margin-right: .7rem; }
+.icon { color: var(--rose-dark); }
+
+/* Hero */
+.hero { padding-top: 1rem; }
+.hero-promises { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding: 0; margin: 2rem 0 0; font-size: .85rem; color: var(--soft); }
+.hero-promises li::before { content: '✦'; color: var(--rose); margin-right: .45rem; font-size: .7rem; }
+.hero-composition { position: relative; max-width: 480px; margin-left: auto; padding: 0 0 2.5rem 2.5rem; }
+.hero-composition .hero-photo { box-shadow: 0 30px 60px rgba(47, 41, 37, .12); }
+.hero-composition::before { content: ''; position: absolute; top: 2.5rem; right: -1.2rem; bottom: 0; left: 1.2rem; border: 1px solid var(--rose); border-radius: 200px 200px 14px 14px; z-index: -1; }
+.hero-round { position: absolute; left: 0; top: 38%; width: 34%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; border: 6px solid var(--cream); box-shadow: 0 15px 35px rgba(47, 41, 37, .15); }
+.hero-round img { width: 100%; height: 100%; object-fit: cover; }
+.hero-note { position: absolute; right: -.5rem; bottom: 0; background: var(--white); border-radius: 14px; padding: .9rem 1.2rem; box-shadow: 0 15px 35px rgba(47, 41, 37, .1); color: var(--ink); text-decoration: none; min-width: 180px; transition: transform .2s; }
+.hero-note strong { display: block; font-family: var(--serif); font-size: 1.25rem; font-weight: 600; }
+.hero-note:hover { color: var(--ink); transform: translateY(-2px); }
+.hero-seal { position: absolute; top: 1.2rem; right: -1rem; width: 92px; height: 92px; border-radius: 50%; background: var(--rose-pale); color: var(--rose-dark); display: grid; place-items: center; text-align: center; font-family: var(--serif); font-style: italic; font-size: 1rem; line-height: 1.1; transform: rotate(-10deg); box-shadow: 0 0 0 6px var(--cream); }
+
+/* Full-width coloured bands, even inside the page container */
+.band { margin: 4.5rem calc(50% - 50vw); padding: 4rem calc(50vw - 50%); }
+.band-beige { background: var(--beige); }
+.band-rose { background: var(--rose-pale); }
+.band-cream { background: var(--white); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+/* Scrolling band */
+.marquee { padding-top: 1.1rem; padding-bottom: 1.1rem; overflow: hidden; margin-top: 4rem; margin-bottom: 0; }
+.marquee-track { display: flex; gap: 2rem; width: max-content; animation: marquee 40s linear infinite; font-family: var(--serif); font-size: 1.5rem; font-style: italic; color: var(--rose-dark); white-space: nowrap; }
+.marquee-track .dot { font-style: normal; font-size: .8rem; align-self: center; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+/* Collections with a photo */
+#collections { padding-top: 4rem; }
+.category-tile { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 200px 200px 14px 14px; overflow: hidden; background: var(--beige); padding: 0; color: #fff; text-decoration: none; }
+.category-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.category-tile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(47, 41, 37, .65), rgba(47, 41, 37, 0) 55%); }
+.category-tile:hover { background: var(--beige); color: #fff; }
+.category-tile:hover img { transform: scale(1.05); }
+.category-tile-text { position: absolute; left: 0; right: 0; bottom: 1.6rem; z-index: 1; text-align: center; }
+.category-tile-text strong { display: block; font-family: var(--serif); font-size: 2rem; font-weight: 600; color: #fff; }
+.category-tile-text span { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .85); }
+.link-arrow { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+.link-arrow:hover { color: var(--rose-dark); border-color: var(--rose-dark); }
+
+/* Product cards */
+.plate .figure-photo { box-shadow: 0 10px 25px rgba(47, 41, 37, .06); transition: box-shadow .3s; }
+.plate:hover .figure-photo { box-shadow: 0 18px 40px rgba(47, 41, 37, .14); }
+.plate-hover { position: absolute; left: 50%; bottom: 1rem; transform: translate(-50%, 10px); background: var(--cream); color: var(--ink); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; padding: .55rem 1.1rem; border-radius: 999px; opacity: 0; transition: opacity .25s, transform .25s; white-space: nowrap; }
+.plate:hover .plate-hover { opacity: 1; transform: translate(-50%, 0); }
+.stamp-rose { background: var(--rose-pale); color: var(--rose-dark); }
+
+/* Workshop story */
+.story { margin-top: 1rem; }
+.story-photo { border-radius: 14px 200px 14px 14px; overflow: hidden; aspect-ratio: 4 / 5; box-shadow: 0 25px 50px rgba(47, 41, 37, .1); }
+.story-photo img { width: 100%; height: 100%; object-fit: cover; }
+.story-text { font-size: 1.05rem; line-height: 1.8; }
+.story-figures { display: flex; flex-wrap: wrap; gap: 1rem 3rem; margin: 2rem 0 0; }
+.story-figures dt { font-family: var(--serif); font-size: 2.6rem; font-weight: 600; line-height: 1; color: var(--rose-dark); }
+.story-figures dd { margin: .3rem 0 0; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
+
+/* Promises */
+.promises { margin-bottom: -3rem; }
+.promises h3 { font-size: 1.35rem; margin: .9rem 0 .4rem; }
+.promises p { color: var(--soft); font-size: .9rem; margin: 0 auto; max-width: 16rem; }
+
+/* Product page extras */
+.mini-promises { display: flex; flex-wrap: wrap; gap: .6rem 1.4rem; margin: 1.5rem 0; font-size: .82rem; color: var(--soft); }
+.mini-promises span { display: inline-flex; align-items: center; gap: .45rem; }
+.mini-promises .icon { width: 20px; height: 20px; }
+.accordion-soft details { border-bottom: 1px solid var(--line); }
+.accordion-soft summary { cursor: pointer; list-style: none; padding: 1rem 0; font-family: var(--serif); font-size: 1.2rem; font-weight: 600; display: flex; justify-content: space-between; }
+.accordion-soft summary::-webkit-details-marker { display: none; }
+.accordion-soft summary::after { content: '+'; font-family: var(--sans); font-weight: 400; color: var(--rose-dark); transition: transform .2s; }
+.accordion-soft details[open] summary::after { transform: rotate(45deg); }
+.accordion-soft p { color: var(--soft); font-size: .92rem; line-height: 1.7; margin: 0 0 1rem; }
+
+/* Footer */
+.footer { background: var(--beige); }
+.footer .brand { font-size: 1.8rem; }
+.footer-title { font-family: var(--sans); font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); font-weight: 500; margin-bottom: 1rem; }
+.footer-links { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+.footer-links a { color: var(--soft); text-decoration: none; font-size: .9rem; }
+.footer-links a:hover { color: var(--rose-dark); }
+.footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--sand); font-size: .78rem; }
+
+@media (max-width: 767.98px) {
+    .hero-composition { margin: 0 auto; padding-left: 1.5rem; }
+    .hero-seal { width: 74px; height: 74px; font-size: .85rem; right: 0; }
+    .band { padding-top: 3rem; padding-bottom: 3rem; margin-top: 3rem; margin-bottom: 3rem; }
+    .category-tile { aspect-ratio: 16 / 10; border-radius: 14px; }
+    .story-photo { aspect-ratio: 16 / 11; }
+}
