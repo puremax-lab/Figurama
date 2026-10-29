@@ -8,7 +8,7 @@ Online shop for collectible figurines built with **Symfony 7.4**: catalogue, car
 ![Symfony](https://img.shields.io/badge/Symfony-7.4_LTS-000000?logo=symfony)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
 ![Stripe](https://img.shields.io/badge/Stripe-Checkout-635BFF?logo=stripe&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-42_passing-2ea44f)
+[![Tests](https://github.com/puremax-lab/Figurama/actions/workflows/tests.yml/badge.svg)](https://github.com/puremax-lab/Figurama/actions/workflows/tests.yml)
 
 ![Home page](docs/screenshots/home.png)
 

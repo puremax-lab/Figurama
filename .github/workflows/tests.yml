@@ -9,11 +9,16 @@ jobs:
   phpunit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
+
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
-          extensions: intl, pdo_sqlite
-          coverage: none
-      - run: composer install --no-interaction --no-progress
-      - run: php bin/phpunit
+          php-version: '8.3'
+          extensions: pdo_sqlite, intl, gd
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      # Tests use their own SQLite database, rebuilt from the demo data before each test (tests/AppWebTestCase.php).
+      - name: Run tests
+        run: php bin/phpunit

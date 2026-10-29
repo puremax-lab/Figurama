@@ -73,10 +73,19 @@
     </div>
 </main>
 
-<footer class="footer py-3">
-    <div class="container d-flex flex-column flex-md-row justify-content-between gap-1">
-        <span>FIGURAMA · BOUTIQUE DE DÉMONSTRATION · AUCUN COLIS N'EST EXPÉDIÉ</span>
-        <span>PHOTOS : UNSPLASH · LIVRAISON OFFERTE BE / FR / LU / NL</span>
+<footer class="footer mt-auto">
+    <div class="container py-4 d-flex flex-column flex-md-row justify-content-between gap-3">
+        <div>
+            <a class="footer-brand" href="{{ path('app_home') }}">FIGURAMA</a>
+            <p class="mb-0 mt-1">PROJET PORTFOLIO · SYMFONY 7.4, DOCTRINE, BOOTSTRAP, STRIPE</p>
+            <p class="mb-0">BOUTIQUE DE DÉMONSTRATION · AUCUN COLIS N'EST EXPÉDIÉ · PHOTOS UNSPLASH</p>
+        </div>
+        <nav class="footer-links d-flex flex-wrap align-items-md-end gap-3" aria-label="Liens du pied de page">
+            <a href="{{ path('app_shop') }}">Catalogue</a>
+            <a href="https://github.com/puremax-lab/Figurama" target="_blank" rel="noopener">Code source ↗</a>
+            <a href="https://github.com/puremax-lab" target="_blank" rel="noopener">GitHub puremax-lab ↗</a>
+            <span>© {{ 'now'|date('Y') }}</span>
+        </nav>
     </div>
 </footer>
 {# Side drawer filled by assets/app.js after a quick add #}
