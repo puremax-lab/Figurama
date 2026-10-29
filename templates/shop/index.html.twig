@@ -3,9 +3,11 @@
 {% block title %}{{ current_category ? current_category.name : 'Catalogue' }}{% endblock %}
 
 {% block body %}
-    <p class="eyebrow mb-2">{{ current_category ? 'Collection' : 'Boutique' }}</p>
-    <h1 class="mb-1">{{ current_category ? current_category.name : 'Toutes les figurines' }}</h1>
-    <p class="text-soft mb-4">{{ total }} figurine{{ total > 1 ? 's' }}</p>
+    <div class="page-band">
+        <p class="eyebrow mb-2"><span class="eyebrow-line"></span>{{ current_category ? 'Collection' : 'Boutique' }}</p>
+        <h1 class="mb-1">{{ current_category ? current_category.name : 'Toutes les figurines' }}</h1>
+        <p class="text-soft mb-0">{{ total }} figurine{{ total > 1 ? 's' }} peintes à la main</p>
+    </div>
 
     <form method="get" class="panel mb-5">
         <div class="row g-3 align-items-end">
@@ -43,7 +45,7 @@
     {% if total %}
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4" id="catalogue">
             {% for product in products %}
-                <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>
+                <div class="col" data-reveal style="--delay: {{ (loop.index0 % 4) * 90 }}ms">{{ include('_partials/_product_card.html.twig') }}</div>
             {% endfor %}
         </div>
     {% else %}

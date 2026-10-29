@@ -243,3 +243,99 @@ h1 em, h2 em { font-style: italic; color: var(--rose-dark); }
     .category-tile { aspect-ratio: 16 / 10; border-radius: 14px; }
     .story-photo { aspect-ratio: 16 / 11; }
 }
+
+/* =========================================================
+   Depth and movement: soft colour washes, waves, animations
+   ========================================================= */
+
+/* Background: cream with soft washes of powder pink, sage and sand, plus the paper grain */
+body {
+    background-color: var(--cream);
+    background-image:
+        radial-gradient(ellipse 60% 45% at 0% 0%, rgba(246, 222, 215, .85), transparent 70%),
+        radial-gradient(ellipse 45% 40% at 100% 18%, rgba(214, 226, 216, .75), transparent 70%),
+        radial-gradient(ellipse 55% 40% at 85% 95%, rgba(241, 226, 210, .9), transparent 70%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .32 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+}
+
+/* Translucent header that lets the colours show through */
+.topbar { position: sticky; top: 0; z-index: 1030; background: rgba(251, 247, 242, .78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom-color: rgba(230, 219, 207, .7); }
+
+/* Floating colour blobs behind the hero photos */
+.hero-composition { isolation: isolate; }
+.blob { position: absolute; border-radius: 50%; filter: blur(40px); z-index: -2; opacity: .9; animation: float 12s ease-in-out infinite; }
+.blob-rose { width: 70%; aspect-ratio: 1; top: -8%; right: -18%; background: radial-gradient(circle, #f1cfc6, #f6e2dc 70%); }
+.blob-sage { width: 55%; aspect-ratio: 1; bottom: -6%; left: -14%; background: radial-gradient(circle, #cfdccf, #e4ece3 70%); animation-delay: -6s; }
+.hero-round { animation: float 8s ease-in-out infinite; }
+.hero-seal { animation: turn 30s linear infinite; }
+@keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(0, -14px); } }
+@keyframes turn { from { transform: rotate(-10deg); } to { transform: rotate(350deg); } }
+
+/* Bands with gradients, a faint dotted pattern and wavy edges */
+.band { position: relative; }
+.band-beige {
+    background:
+        radial-gradient(circle, rgba(158, 106, 99, .09) 1px, transparent 1.5px) 0 0 / 22px 22px,
+        linear-gradient(135deg, #f3ece3 0%, #f6e4de 60%, #efe6dc 100%);
+}
+.band-rose { background: linear-gradient(90deg, #f6e1db, #f3e9e0 50%, #e4ece4); }
+.band-cream { background: linear-gradient(180deg, rgba(255, 255, 255, .85), rgba(232, 239, 233, .7)); border: 0; }
+.band-wave::before, .band-wave::after { content: ''; position: absolute; left: 0; right: 0; height: 40px; background-repeat: repeat-x; background-size: 1200px 40px; pointer-events: none; }
+.band-wave::before { top: -39px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C200 0 400 0 600 20 S1000 40 1200 10 V40 Z' fill='%23f3ece3'/%3E%3C/svg%3E"); }
+.band-wave::after { bottom: -39px; transform: scaleY(-1); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C300 10 500 0 700 18 S1000 40 1200 20 V40 Z' fill='%23efe6dc'/%3E%3C/svg%3E"); }
+
+/* Header band of the shop page */
+.page-band {
+    position: relative;
+    margin: -1.5rem calc(50% - 50vw) 2.5rem;
+    padding: 3.5rem calc(50vw - 50%) 3rem;
+    background:
+        radial-gradient(ellipse 50% 90% at 90% 50%, rgba(214, 226, 216, .8), transparent 70%),
+        linear-gradient(120deg, #f6e1db 0%, #f4ece4 55%, #f1e8de 100%);
+    overflow: hidden;
+}
+.page-band::after { content: ''; position: absolute; right: 8%; top: 50%; width: 220px; height: 220px; border-radius: 50%; border: 1px solid rgba(158, 106, 99, .35); transform: translateY(-50%); }
+
+/* Panels and details lists slightly warm instead of pure white */
+.panel, .cartouche, .counter { background: rgba(255, 255, 255, .72); backdrop-filter: blur(6px); }
+
+/* Deep warm footer for contrast */
+.footer { background: #3b302b; color: #cdbfb3; }
+.footer .brand { color: var(--cream); }
+.footer-title { color: var(--cream); }
+.footer-links a { color: #cdbfb3; }
+.footer-links a:hover { color: #f1cfc6; }
+.footer-bottom { border-top-color: rgba(255, 255, 255, .12); }
+
+/* Movement on hover */
+.plate { transition: transform .35s ease; }
+.plate:hover { transform: translateY(-6px); }
+.btn { transition: background-color .25s, color .25s, border-color .25s, transform .2s; }
+.btn:hover { transform: translateY(-2px); }
+.link-arrow .arrow { display: inline-block; transition: transform .25s; }
+.link-arrow:hover .arrow { transform: translateX(5px); }
+.category-tile-text span { transition: letter-spacing .3s; }
+.category-tile:hover .category-tile-text span { letter-spacing: .22em; }
+
+/* Entrance animations (only when JavaScript runs, see base.html.twig) */
+.js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--delay, 0ms); }
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .blob, .hero-round, .hero-seal { animation: none; }
+    .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+    .plate:hover, .btn:hover { transform: none; }
+}
+
+@media (max-width: 767.98px) {
+    .page-band { padding-top: 2.5rem; padding-bottom: 2rem; }
+    .page-band::after { width: 140px; height: 140px; right: -30px; }
+    .band-wave::before, .band-wave::after { height: 24px; background-size: 800px 24px; }
+    .band-wave::before { top: -23px; }
+    .band-wave::after { bottom: -23px; }
+}
+
+html, body { overflow-x: clip; }
+.page-band { margin-top: -3rem; }
+@media (max-width: 767.98px) { .page-band { margin-top: -1.5rem; } }
