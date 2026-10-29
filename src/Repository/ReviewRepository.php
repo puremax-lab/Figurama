@@ -49,17 +49,17 @@ class ReviewRepository extends ServiceEntityRepository
         return $stats;
     }
 
-    /** Only customers who received a paid order with this piece may review it, once. */
+    /** Only customers whose order with this piece has been delivered may review it, once. */
     public function canReview(User $customer, Product $product): bool
     {
         $bought = (int) $this->getEntityManager()->createQueryBuilder()
             ->select('COUNT(i.id)')
             ->from(OrderItem::class, 'i')
             ->join('i.order', 'o')
-            ->where('i.product = :product AND o.customer = :customer AND o.status IN (:sold)')
+            ->where('i.product = :product AND o.customer = :customer AND o.status = :delivered')
             ->setParameter('product', $product)
             ->setParameter('customer', $customer)
-            ->setParameter('sold', OrderStatus::sold())
+            ->setParameter('delivered', OrderStatus::Delivered)
             ->getQuery()
             ->getSingleScalarResult();
 

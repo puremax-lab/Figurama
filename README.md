@@ -6,7 +6,7 @@ Online shop for collectible figurines, built with **Symfony 7.4**: catalogue, ca
 ![Symfony](https://img.shields.io/badge/Symfony-7.4_LTS-000000?logo=symfony)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
 ![Stripe](https://img.shields.io/badge/Stripe-Checkout-635BFF?logo=stripe&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-41_passing-2ea44f)
+![Tests](https://img.shields.io/badge/tests-42_passing-2ea44f)
 
 ![Home page](docs/screenshots/home.png)
 
@@ -22,7 +22,7 @@ The cart is called a *bon de commande* (order form), the back office *l'atelier*
 - Search from any page, browse the catalogue by series, sort by price, hide out-of-stock pieces; more pieces load automatically while scrolling
 - Add a piece in one click from the catalogue: the order form opens in a side drawer, without leaving the page
 - Read the technical sheet and the **verified reviews** of each piece; on a phone, the buy button stays at the bottom of the screen
-- Review a piece once it has been bought and paid (one review per piece)
+- Review a piece once your order has been delivered (one review per piece)
 - Enter a shipping address and pay with **Stripe Checkout** (test cards), or with the built-in demo payment when no Stripe key is set
 - Follow your orders, pay later or cancel an unpaid order
 
@@ -38,7 +38,7 @@ The cart is called a *bon de commande* (order form), the back office *l'atelier*
 - **Prices in cents**, copied into each order line: changing a price never changes a past order.
 - **Session cart** ([`Cart`](src/Cart/Cart.php)) that removes pieces no longer sold and lowers quantities when the stock goes down.
 - **Stripe without the SDK** ([`StripeClient`](src/Payment/StripeClient.php)): Checkout sessions created with Symfony HttpClient, payment checked again when the customer comes back, and a webhook whose **signature is verified** (HMAC-SHA256, 5-minute tolerance). Marking an order as paid is idempotent, because Stripe may send the same event twice.
-- **Verified reviews** ([`ReviewRepository`](src/Repository/ReviewRepository.php)): only customers with a paid order containing the piece can review it, once (unique key on product + author). Average ratings for a whole page are loaded in a single query ([`Ratings`](src/Review/Ratings.php)).
+- **Verified reviews** ([`ReviewRepository`](src/Repository/ReviewRepository.php)): only customers whose order containing the piece has been delivered can review it, once (unique key on product + author). Average ratings for a whole page are loaded in a single query ([`Ratings`](src/Review/Ratings.php)).
 - **Quick add and cart drawer** ([`app.js`](assets/app.js)): the add-to-cart forms are sent in the background, the controller answers in JSON, the counters update and a side drawer shows the order form. Without JavaScript the same forms post normally.
 - **Infinite scroll without a library** ([`app.js`](assets/app.js)): an `IntersectionObserver` fetches the next page when the "load more" link gets close, and the controller returns only the new cards. Without JavaScript, the link simply opens the next page.
 - **Security**: login throttling, hashed passwords, CSRF tokens on every form that changes data, and a **voter** ([`OrderVoter`](src/Security/OrderVoter.php)) so customers only see their own orders.
@@ -73,7 +73,7 @@ erDiagram
         int id PK
         varchar name
         varchar slug UK
-        char code "FAN, RTF, CUR"
+        varchar code "FAN, RTF, CUR"
     }
     PRODUCT {
         int id PK
@@ -149,7 +149,7 @@ Then pay with the card `4242 4242 4242 4242`, any future date and any CVC. In lo
 php bin/phpunit
 ```
 
-41 functional and unit tests go through the whole purchase: search, quick add, cart and stock limits, verified reviews, checkout, demo payment, cancelling, permissions, back office, and the Stripe client and webhook (with `MockHttpClient` and signed payloads, never the real API). GitHub Actions runs them at every push.
+42 functional and unit tests go through the whole purchase: search, quick add, cart and stock limits, verified reviews, checkout, demo payment, cancelling, permissions, back office, and the Stripe client and webhook (with `MockHttpClient` and signed payloads, never the real API). GitHub Actions runs them at every push.
 
 ## Credits
 

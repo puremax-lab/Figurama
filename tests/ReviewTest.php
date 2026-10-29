@@ -35,6 +35,14 @@ final class ReviewTest extends AppWebTestCase
         $this->assertResponseStatusCodeSame(403);
     }
 
+    public function testAPaidOrderNotYetDeliveredIsNotEnough(): void
+    {
+        $this->loginAs('client@figurama.test'); // the Scaphandrier ailé is in a paid order, not delivered yet
+        $this->client->request('GET', '/produit/scaphandrier-aile');
+
+        $this->assertSelectorNotExists('form[name="review_form"]');
+    }
+
     public function testACustomerReviewsAPieceTheyReceivedOnce(): void
     {
         $this->loginAs('client@figurama.test'); // received the Dragon de rubis in a delivered order
