@@ -209,6 +209,7 @@ a { text-underline-offset: 3px; }
 .index-link { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .9rem 0; border-bottom: 1px dashed var(--line); color: var(--ink); text-decoration: none; }
 .index-link:hover { color: var(--yellow); }
 .index-link .code { font-size: .75rem; color: var(--black); background: var(--yellow); padding: .05rem .35rem; margin-right: .6rem; }
+.index-link strong { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 1.15rem; }
 .load-more { display: block; width: fit-content; margin: 2.5rem auto 0; }
 .footer { border-top: 2px solid var(--line); background: var(--paper-dark); font-size: .72rem; letter-spacing: .06em; color: var(--muted); }
 .footer-brand { font-family: var(--display); font-size: 1.1rem; letter-spacing: .04em; color: var(--ink); text-decoration: none; }

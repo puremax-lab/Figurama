@@ -9,12 +9,13 @@ final class ShopTest extends AppWebTestCase
         return $crawler->filter('.plate-title')->each(fn ($node) => trim($node->text()));
     }
 
-    public function testHomeShowsFeaturedProducts(): void
+    public function testHomeShowsSeriesAndFeaturedProducts(): void
     {
         $crawler = $this->client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Figurines');
+        $this->assertCount(3, $crawler->filter('.index-link'));
         $this->assertSelectorTextContains('main', 'Sélection du moment');
         $this->assertCount(4, $crawler->filter('.plate'));
     }
