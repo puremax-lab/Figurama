@@ -41,7 +41,7 @@
     </form>
 
     {% if total %}
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4" id="catalogue">
             {% for product in products %}
                 <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>
             {% endfor %}
@@ -54,15 +54,5 @@
         </div>
     {% endif %}
 
-    {% if pages > 1 %}
-        <nav class="mt-5" aria-label="Pages">
-            <ul class="pagination justify-content-center">
-                {% for p in 1..pages %}
-                    <li class="page-item {{ p == page ? 'active' }}">
-                        <a class="page-link" href="{{ path('app_shop', app.request.query.all|merge({page: p})) }}">{{ '%02d'|format(p) }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </nav>
-    {% endif %}
+    {{ include('shop/_load_more.html.twig') }}
 {% endblock %}

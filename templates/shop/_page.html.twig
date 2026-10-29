@@ -1,0 +1,7 @@
+{# One page of the catalogue, appended by assets/app.js while scrolling #}
+<div data-items>
+    {% for product in products %}
+        <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>
+    {% endfor %}
+</div>
+{{ include('shop/_load_more.html.twig') }}

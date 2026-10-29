@@ -138,17 +138,18 @@ a { text-underline-offset: 3px; }
 .row > :nth-child(3n) .plate .sticker { transform: rotate(7deg); }
 .plate .plate-low { top: auto; right: auto; left: .4rem; bottom: 4.6rem; font-size: .7rem; padding: .2rem .45rem; transform: rotate(-4deg); }
 
-/* Photos printed as cyanotypes, in full colour on hover */
-.figure-photo { position: relative; background: #1d5aa0; overflow: hidden; aspect-ratio: 1; }
-.figure-photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15) brightness(1.05); mix-blend-mode: luminosity; transition: filter .3s, mix-blend-mode .3s; }
-.plate:hover .figure-photo img, .figure-photo:hover img { filter: none; mix-blend-mode: normal; }
+/* Photo in a frame, slightly zoomed on hover */
+.figure-photo { position: relative; background: var(--paper-dark); overflow: hidden; aspect-ratio: 1; }
+.figure-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.plate:hover .figure-photo img { transform: scale(1.04); }
 
 /* Dimension line on the right of the photo: |<— 24 cm —>| */
 .dim-v { position: absolute; top: 8%; bottom: 8%; right: 10px; width: 0; border-left: 1px solid #fff; z-index: 2; }
 .dim-v::before, .dim-v::after { content: ''; position: absolute; left: -6px; width: 11px; border-top: 1px solid #fff; }
 .dim-v::before { top: 0; }
 .dim-v::after { bottom: 0; }
-.dim-v span { position: absolute; top: 50%; right: 4px; transform: translateY(-50%) rotate(-90deg); transform-origin: right center; white-space: nowrap; font-size: .7rem; background: #1d5aa0; padding: 0 .3rem; }
+.dim-v { filter: drop-shadow(0 0 2px rgba(0, 0, 0, .8)); }
+.dim-v span { position: absolute; top: 50%; right: 4px; transform: translateY(-50%) rotate(-90deg); transform-origin: right center; white-space: nowrap; font-size: .7rem; background: var(--paper-dark); padding: 0 .3rem; }
 
 /* ---------- Title block (cartouche) ---------- */
 .cartouche { border: 2px solid var(--line); background: rgba(13, 44, 85, .7); font-size: .78rem; }
@@ -209,6 +210,7 @@ a { text-underline-offset: 3px; }
 .counter .label { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
 .breadcrumb { --bs-breadcrumb-divider: '/'; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
 .pagination { --bs-pagination-bg: transparent; --bs-pagination-color: var(--ink); --bs-pagination-border-color: var(--line); --bs-pagination-active-bg: var(--yellow); --bs-pagination-active-color: var(--black); --bs-pagination-active-border-color: var(--black); --bs-pagination-hover-bg: rgba(255,255,255,.1); --bs-pagination-hover-color: #fff; }
+.load-more { display: block; width: fit-content; margin: 2.5rem auto 0; }
 .footer { border-top: 2px solid var(--line); background: var(--paper-dark); font-size: .72rem; letter-spacing: .06em; color: var(--muted); }
 .nav-pills { --bs-nav-pills-link-active-bg: var(--yellow); --bs-nav-pills-link-active-color: var(--black); --bs-nav-link-color: var(--ink); --bs-nav-link-hover-color: var(--yellow); }
 .nav-pills .nav-link { text-transform: uppercase; font-size: .78rem; letter-spacing: .08em; border: 1px solid var(--line); margin-right: .4rem; }

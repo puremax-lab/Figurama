@@ -46,10 +46,19 @@ final class ShopTest extends AppWebTestCase
         $this->assertNotContains('Robot à remontoir', $this->names($inStock));
     }
 
-    public function testPaginatesTheCatalogue(): void
+    public function testLoadsTheCatalogueByChunksWhileScrolling(): void
     {
-        $this->assertCount(12, $this->client->request('GET', '/boutique')->filter('.plate'));
-        $this->assertCount(3, $this->client->request('GET', '/boutique?page=2')->filter('.plate'));
+        $crawler = $this->client->request('GET', '/boutique?categorie=&tri=prix-croissant');
+        $this->assertCount(12, $crawler->filter('#catalogue .plate'));
+        $next = $crawler->filter('[data-load-more]')->attr('href');
+        $this->assertStringContainsString('page=2', $next);
+        $this->assertStringContainsString('tri=prix-croissant', $next, 'the filters are kept');
+
+        // What assets/app.js asks for: only the next cards, and no link since it is the last page.
+        $more = $this->client->request('GET', $next, server: ['HTTP_X_REQUESTED_WITH' => 'fetch']);
+        $this->assertCount(3, $more->filter('[data-items] .plate'));
+        $this->assertCount(0, $more->filter('[data-load-more]'));
+        $this->assertCount(0, $more->filter('nav'), 'no layout around the cards');
     }
 
     public function testProductPageShowsTheTechnicalSheet(): void

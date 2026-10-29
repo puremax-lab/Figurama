@@ -35,8 +35,17 @@ final class ShopController extends AbstractController
 
         $results = $products->search($category, $query, $sort, $inStock, $page, self::PER_PAGE);
         $pages = max(1, (int) ceil(count($results) / self::PER_PAGE));
+        $nextUrl = $page < $pages
+            ? $this->generateUrl('app_shop', ['page' => $page + 1] + $request->query->all())
+            : null;
+
+        // Infinite scroll: assets/app.js asks for the next page and only needs the new cards.
+        if ($request->headers->get('X-Requested-With') === 'fetch') {
+            return $this->render('shop/_page.html.twig', ['products' => $results, 'next_url' => $nextUrl]);
+        }
 
         return $this->render('shop/index.html.twig', [
+            'next_url' => $nextUrl,
             'products' => $results,
             'total' => count($results),
             'categories' => $categories->withProductCount(),
