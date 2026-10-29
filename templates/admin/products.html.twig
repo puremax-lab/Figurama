@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produits{% endblock %}
+
+{% block body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 class="mb-0">Produits</h1>
+        <a href="{{ path('admin_product_new') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nouveau produit</a>
+    </div>
+    {{ include('admin/_nav.html.twig') }}
+
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead><tr><th>Produit</th><th>Catégorie</th><th class="text-end">Prix</th><th class="text-end">Stock</th><th>État</th></tr></thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td><a href="{{ path('admin_product_edit', {id: product.id}) }}" class="fw-semibold">{{ product.icon }} {{ product.name }}</a></td>
+                            <td>{{ product.category.name }}</td>
+                            <td class="text-end text-nowrap">{{ product.priceCents|price }}</td>
+                            <td class="text-end {{ product.stock <= 3 ? 'text-danger fw-semibold' }}">{{ product.stock }}</td>
+                            <td>
+                                {% if not product.active %}<span class="badge text-bg-secondary">Masqué</span>
+                                {% elseif product.featured %}<span class="badge text-bg-primary">En avant</span>
+                                {% else %}<span class="badge text-bg-success">En vente</span>{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

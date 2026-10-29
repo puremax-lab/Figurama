@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ order.reference }}{% endblock %}
+
+{% block body %}
+    <a href="{{ path('admin_orders') }}" class="small"><i class="bi bi-arrow-left"></i> Commandes</a>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 my-3">
+        <div>
+            <h1 class="mb-0">Commande {{ order.reference }}</h1>
+            <span class="text-body-secondary">{{ order.customer.fullName }} · {{ order.customer.email }}</span>
+        </div>
+        {{ include('_partials/_status.html.twig', {status: order.status}) }}
+    </div>
+
+    {% set actions = {shipped: 'Marquer comme expédiée', delivered: 'Marquer comme livrée', cancelled: 'Annuler et remettre en stock'} %}
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        {% for value, label in actions %}
+            {% if order.status.canBecome(enum('App\\Entity\\OrderStatus').from(value)) %}
+                <form method="post" action="{{ path('admin_order_status', {reference: order.reference}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('status' ~ order.reference) }}">
+                    <input type="hidden" name="status" value="{{ value }}">
+                    <button class="btn {{ value == 'cancelled' ? 'btn-outline-danger' : 'btn-primary' }}">{{ label }}</button>
+                </form>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {{ include('_partials/_order_summary.html.twig') }}
+{% endblock %}

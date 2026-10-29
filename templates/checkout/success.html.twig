@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Merci pour votre commande{% endblock %}
+
+{% block body %}
+    <div class="text-center py-4">
+        {% if order.status.value == 'pending' %}
+            <p class="fs-1 mb-2" aria-hidden="true">⏳</p>
+            <h1>Paiement en cours de validation</h1>
+            <p class="text-body-secondary">Nous attendons la confirmation de Stripe. Votre commande {{ order.reference }} sera mise à jour dans quelques instants.</p>
+        {% else %}
+            <p class="fs-1 mb-2" aria-hidden="true">🎉</p>
+            <h1>Merci pour votre commande !</h1>
+            <p class="text-body-secondary">Commande <strong>{{ order.reference }}</strong> payée : {{ order.totalCents|price }}.<br>Elle sera expédiée à {{ order.shippingCity }} sous 48 heures.</p>
+        {% endif %}
+        <a href="{{ path('app_account_order', {reference: order.reference}) }}" class="btn btn-primary">Voir ma commande</a>
+        <a href="{{ path('app_shop') }}" class="btn btn-outline-dark">Continuer mes achats</a>
+    </div>
+{% endblock %}

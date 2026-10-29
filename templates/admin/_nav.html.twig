@@ -1,0 +1,5 @@
+<ul class="nav nav-pills mb-4 flex-nowrap overflow-auto">
+    <li class="nav-item"><a class="nav-link text-nowrap {{ app.current_route == 'admin_dashboard' ? 'active' }}" href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+    <li class="nav-item"><a class="nav-link text-nowrap {{ app.current_route starts with 'admin_order' ? 'active' }}" href="{{ path('admin_orders') }}">Commandes</a></li>
+    <li class="nav-item"><a class="nav-link text-nowrap {{ app.current_route starts with 'admin_product' ? 'active' }}" href="{{ path('admin_products') }}">Produits</a></li>
+</ul>

@@ -1,0 +1,3 @@
+# Session-based CSRF tokens for every form, the login and the logout
+framework:
+    csrf_protection: true

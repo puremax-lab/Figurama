@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commandes{% endblock %}
+
+{% block body %}
+    <h1 class="mb-3">Commandes</h1>
+    {{ include('admin/_nav.html.twig') }}
+
+    <div class="d-flex flex-nowrap overflow-auto gap-2 mb-3">
+        <a href="{{ path('admin_orders') }}" class="btn btn-sm text-nowrap {{ current_status ? 'btn-outline-dark' : 'btn-dark' }}">Toutes</a>
+        {% for status in enum('App\\Entity\\OrderStatus').cases() %}
+            <a href="{{ path('admin_orders', {statut: status.value}) }}" class="btn btn-sm text-nowrap {{ current_status == status ? 'btn-dark' : 'btn-outline-dark' }}">{{ status.label }} ({{ counts[status.value] }})</a>
+        {% endfor %}
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead><tr><th>Référence</th><th>Client</th><th>Date</th><th class="text-end">Total</th><th>Statut</th></tr></thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td><a href="{{ path('admin_order', {reference: order.reference}) }}" class="fw-semibold">{{ order.reference }}</a></td>
+                            <td>{{ order.customer.fullName }}</td>
+                            <td class="text-nowrap">{{ order.createdAt|format_date('medium', locale: 'fr') }}</td>
+                            <td class="text-end text-nowrap">{{ order.totalCents|price }}</td>
+                            <td>{{ include('_partials/_status.html.twig', {status: order.status}) }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5" class="text-center text-body-secondary py-4">Aucune commande.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

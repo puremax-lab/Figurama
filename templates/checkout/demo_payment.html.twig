@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3">Paiement de la commande {{ order.reference }}</h1>
+                    <p class="fs-4 fw-bold">{{ order.totalCents|price }}</p>
+                    <div class="alert alert-info small">
+                        <i class="bi bi-info-circle"></i>
+                        Mode démonstration : aucune clé Stripe n'est configurée, le paiement est simulé.
+                        Avec une clé Stripe de test, ce bouton ouvre la vraie page de paiement Stripe.
+                    </div>
+                    <form method="post" action="{{ path('app_payment_demo', {reference: order.reference}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('pay' ~ order.reference) }}">
+                        <button class="btn btn-primary btn-lg w-100"><i class="bi bi-lock"></i> Payer {{ order.totalCents|price }}</button>
+                    </form>
+                    <a href="{{ path('app_account_order', {reference: order.reference}) }}" class="btn btn-link w-100 mt-2">Payer plus tard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

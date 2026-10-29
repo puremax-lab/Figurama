@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Livraison</h1>
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+                        {{ form_row(form.shippingName) }}
+                        {{ form_row(form.shippingAddress) }}
+                        <div class="row">
+                            <div class="col-sm-4">{{ form_row(form.shippingPostalCode) }}</div>
+                            <div class="col-sm-8">{{ form_row(form.shippingCity) }}</div>
+                        </div>
+                        {{ form_row(form.shippingCountry) }}
+                        <button class="btn btn-primary btn-lg w-100">Continuer vers le paiement</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5">Votre commande</h2>
+                    <ul class="list-unstyled mb-3">
+                        {% for line in lines %}
+                            <li class="d-flex justify-content-between py-1">
+                                <span>{{ line.quantity }} × {{ line.product.name }}</span>
+                                <span class="text-nowrap">{{ line.totalCents|price }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="d-flex justify-content-between fw-bold fs-5 border-top pt-2">
+                        <span>Total</span><span>{{ total|price }}</span>
+                    </div>
+                    <p class="small text-body-secondary mt-3 mb-0"><i class="bi bi-info-circle"></i> Les articles sont réservés pour vous dès cette étape.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
