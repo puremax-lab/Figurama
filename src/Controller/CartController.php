@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Cart\Cart;
 use App\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,21 +28,36 @@ final class CartController extends AbstractController
         ]);
     }
 
+    /** Content of the side drawer opened by assets/app.js after a quick add. */
+    #[Route('/apercu', name: 'app_cart_drawer')]
+    public function drawer(): Response
+    {
+        return $this->render('cart/_drawer.html.twig', [
+            'lines' => $this->cart->lines(),
+            'total' => $this->cart->totalCents(),
+        ]);
+    }
+
     #[Route('/ajouter/{id}', name: 'app_cart_add', methods: ['POST'])]
-    public function add(Product $product, Request $request): RedirectResponse
+    public function add(Product $product, Request $request): Response
     {
         $this->checkToken($request, 'cart');
         $wanted = max(1, $request->request->getInt('quantity', 1));
         $before = $this->cart->count();
         $this->cart->add($product, $wanted);
+        $added = $this->cart->count() > $before;
+        $message = $added
+            ? sprintf('« %s » a été ajouté au bon de commande.', $product->getName())
+            : sprintf('« %s » n\'est plus disponible en plus grande quantité.', $product->getName());
 
-        if ($this->cart->count() === $before) {
-            $this->addFlash('warning', sprintf('« %s » n\'est plus disponible en plus grande quantité.', $product->getName()));
-        } else {
-            $this->addFlash('success', sprintf('« %s » a été ajouté au panier.', $product->getName()));
+        // Quick add from assets/app.js: answer in JSON, the page stays where it is.
+        if ($request->headers->get('X-Requested-With') === 'fetch') {
+            return new JsonResponse(['added' => $added, 'count' => $this->cart->count(), 'message' => $message]);
         }
 
-        return $this->redirectToRoute($request->request->get('back') === 'cart' ? 'app_cart' : 'app_product', ['slug' => $product->getSlug()]);
+        $this->addFlash($added ? 'success' : 'warning', $message);
+
+        return $this->redirectToRoute('app_product', ['slug' => $product->getSlug()]);
     }
 
     #[Route('/modifier/{id}', name: 'app_cart_update', methods: ['POST'])]

@@ -1,3 +1,4 @@
+{% set stats = rating(product) %}
 <article class="plate">
     <span class="sticker">{{ product.priceCents|price }}</span>
     <header class="plate-head"><span>{{ product.reference }}</span></header>
@@ -5,8 +6,25 @@
         <img src="{{ product.imageUrl }}" alt="{{ product.name }}" loading="lazy" width="600" height="600">
         <div class="dim-v" aria-hidden="true"><span>{{ product.heightCm }} cm</span></div>
         {% if product.stock == 0 %}<span class="stamp">Épuisé</span>{% endif %}
+        {% if product.lowStock %}<span class="sticker sticker-white plate-low">Plus que {{ product.stock }}</span>{% endif %}
     </div>
-    {% if product.lowStock %}<span class="sticker sticker-white plate-low">Plus que {{ product.stock }}</span>{% endif %}
     <h3 class="plate-title"><a href="{{ path('app_product', {slug: product.slug}) }}" class="stretched-link">{{ product.name }}</a></h3>
     <p class="plate-meta">Éch. {{ product.scale }} · {{ product.material }}</p>
+    <div class="plate-foot">
+        {% if stats %}
+            <span class="plate-rating">
+                <span class="stars" aria-hidden="true">{{ stats.average|stars }}</span>
+                <span class="visually-hidden">Note {{ stats.average|number_format(1, ',') }} sur 5,</span>
+                ({{ stats.count }})
+            </span>
+        {% else %}
+            <span class="plate-rating text-muted-blue">Nouveau</span>
+        {% endif %}
+        {% if product.available %}
+            <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="quick-add" data-cart-add>
+                <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
+                <button class="btn btn-primary btn-sm" aria-label="Ajouter {{ product.name }} au bon de commande">+ Ajouter</button>
+            </form>
+        {% endif %}
+    </div>
 </article>

@@ -9,7 +9,7 @@ final class CartTest extends AppWebTestCase
         $this->addToCart('Dragon de rubis', 2);
         $this->client->followRedirect();
 
-        $this->assertSelectorTextContains('.alert-success', 'ajouté au panier');
+        $this->assertSelectorTextContains('.alert-success', 'ajouté au bon de commande');
         $crawler = $this->client->request('GET', '/panier');
         $this->assertSelectorTextContains('main', 'Dragon de rubis');
         $this->assertSelectorTextContains('main', '99,80');
@@ -32,7 +32,7 @@ final class CartTest extends AppWebTestCase
         $this->client->request('GET', '/produit/robot-a-remontoir');
 
         $this->assertSelectorTextContains('main', 'reviendra bientôt en stock');
-        $this->assertSelectorNotExists('form[action*="/panier/ajouter"]');
+        $this->assertSelectorNotExists('#buy-form');
     }
 
     public function testUpdatesAndRemovesLines(): void
@@ -46,6 +46,32 @@ final class CartTest extends AppWebTestCase
         $this->client->submit($crawler->selectButton('Mettre à jour')->form(['quantity' => 0]));
         $this->client->followRedirect();
         $this->assertSelectorTextContains('main', 'Aucune pièce n\'a encore été ajoutée.');
+    }
+
+    public function testQuickAddFromACardAnswersInJson(): void
+    {
+        $crawler = $this->client->request('GET', '/boutique');
+        $form = $crawler->filter('form[data-cart-add]')->first()->form();
+        $this->client->submit($form, [], ['HTTP_X_REQUESTED_WITH' => 'fetch']);
+
+        $this->assertResponseIsSuccessful();
+        $json = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertTrue($json['added']);
+        $this->assertSame(1, $json['count']);
+
+        // The side drawer lists the piece with a link to the checkout.
+        $drawer = $this->client->request('GET', '/panier/apercu');
+        $this->assertCount(1, $drawer->filter('.drawer-lines li'));
+        $this->assertCount(1, $drawer->filter('a[href="/commande"]'));
+    }
+
+    public function testHeaderSearchOpensTheCatalogue(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+        $this->client->submit($crawler->filter('form[role="search"]')->form(['q' => 'astronaute']));
+
+        $this->assertRouteSame('app_shop');
+        $this->assertCount(2, $this->client->getCrawler()->filter('#catalogue .plate'));
     }
 
     public function testRefusesCartChangesWithoutCsrfToken(): void

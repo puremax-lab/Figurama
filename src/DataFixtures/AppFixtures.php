@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Order;
 use App\Entity\OrderStatus;
 use App\Entity\Product;
+use App\Entity\Review;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -95,6 +96,38 @@ final class AppFixtures extends Fixture
             }
             $manager->persist($order);
         }
+
+        // Demo customers who received their order and reviewed it: [first name, last name, [product index, rating, comment]...]
+        $reviewers = [
+            ['Léa', 'Moreau', [0, 5, 'Les écailles sont encore plus belles en vrai. Il trône sur mon bureau.'], [6, 4, 'Les deux robots sont superbes, la tôle fait vraiment vintage. Un peu plus petits que prévu.']],
+            ['Samir', 'Haddad', [1, 5, 'Le dragonnet est adorable, ma fille l\'a adopté tout de suite.'], [11, 5, 'Une vraie pièce d\'exposition. Le laiton du casque est magnifique.'], [3, 4, 'Peinture très fine pour une si petite figurine. Livraison rapide.']],
+            ['Jonas', 'Peeters', [0, 4, 'Très beau dragon, l\'orbe accroche bien la lumière. Emballage soigné.'], [9, 5, 'Parfait pour mon étagère spatiale, le socle lunaire est très réussi.'], [14, 4, 'Pratique pour dessiner, les articulations tiennent bien les poses.']],
+        ];
+        foreach ($reviewers as $i => [$firstName, $lastName]) {
+            $customer = $this->user(strtolower($firstName) . '@figurama.test', $firstName, $lastName);
+            $manager->persist($customer);
+            $order = (new Order($customer))
+                ->setShippingName("$firstName $lastName")
+                ->setShippingAddress('Rue de la Station 8')
+                ->setShippingPostalCode('4000')
+                ->setShippingCity('Liège')
+                ->setShippingCountry('BE');
+            foreach (array_slice($reviewers[$i], 2) as [$index]) {
+                $order->addItem($products[$index], 1);
+            }
+            foreach ([OrderStatus::Paid, OrderStatus::Shipped, OrderStatus::Delivered] as $step) {
+                $order->changeStatus($step);
+            }
+            $manager->persist($order);
+            foreach (array_slice($reviewers[$i], 2) as $n => [$index, $rating, $comment]) {
+                $review = (new Review($products[$index], $customer))
+                    ->setRating($rating)
+                    ->setComment($comment)
+                    ->setCreatedAt(new \DateTimeImmutable(sprintf('-%d days', 3 + $i * 9 + $n * 2)));
+                $manager->persist($review);
+            }
+        }
+        $manager->persist((new Review($products[13], $client))->setRating(4)->setComment('Solide et bien peint, mon neveu ne le lâche plus.'));
 
         $manager->flush();
     }

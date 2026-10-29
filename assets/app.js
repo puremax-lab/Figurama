@@ -47,3 +47,45 @@ function watch(link) {
 }
 
 document.querySelectorAll('[data-load-more]').forEach(watch);
+
+/*
+ * Quick add to cart. Forms marked data-cart-add are sent in the background;
+ * the counters in the header are updated and the side drawer opens with the
+ * order form. Without JavaScript, the form posts normally.
+ */
+const drawer = document.getElementById('cartDrawer');
+
+async function refreshDrawer(message = '') {
+    const response = await fetch(drawer.dataset.url, { headers: { 'X-Requested-With': 'fetch' } });
+    drawer.querySelector('[data-cart-drawer-body]').innerHTML = await response.text();
+    drawer.querySelector('[data-cart-message]').textContent = message;
+    window.bootstrap.Offcanvas.getOrCreateInstance(drawer).show();
+}
+
+document.addEventListener('submit', async (event) => {
+    const form = event.target.closest('[data-cart-add]');
+    if (!form || !drawer || !window.bootstrap) {
+        return;
+    }
+    event.preventDefault();
+    const button = form.querySelector('button') ?? document.querySelector(`[form="${form.id}"]`);
+    button?.setAttribute('disabled', '');
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'fetch' },
+        });
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+        const result = await response.json();
+        document.querySelectorAll('[data-cart-count]').forEach((counter) => { counter.textContent = result.count; });
+        await refreshDrawer(result.message);
+    } catch {
+        form.submit();
+    } finally {
+        button?.removeAttribute('disabled');
+    }
+});

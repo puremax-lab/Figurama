@@ -3,7 +3,9 @@
 namespace App\Twig;
 
 use App\Cart\Cart;
+use App\Entity\Product;
 use App\Payment\StripeClient;
+use App\Review\Ratings;
 use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 
@@ -14,8 +16,25 @@ final class AppExtension
     public function __construct(
         private readonly Cart $cart,
         private readonly StripeClient $stripe,
+        private readonly Ratings $ratings,
     ) {
         $this->formatter = new \NumberFormatter('fr_BE', \NumberFormatter::CURRENCY);
+    }
+
+    /** @return array{average: float, count: int}|null */
+    #[AsTwigFunction('rating')]
+    public function rating(Product $product): ?array
+    {
+        return $this->ratings->for($product);
+    }
+
+    /** 4.4 → "★★★★☆" (rounded to the nearest star) */
+    #[AsTwigFilter('stars')]
+    public function stars(float $average): string
+    {
+        $full = (int) round($average);
+
+        return str_repeat('★', $full) . str_repeat('☆', 5 - $full);
     }
 
     /** 2490 → "24,90 €" */

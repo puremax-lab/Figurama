@@ -1,0 +1,20 @@
+{# Contents of the side drawer (see CartController::drawer) #}
+{% if lines is empty %}
+    <p class="text-muted-blue">Aucune pièce pour l'instant.</p>
+{% else %}
+    <ul class="drawer-lines">
+        {% for line in lines %}
+            <li>
+                <img src="{{ line.product.imageUrl|replace({'w=900': 'w=200'}) }}" alt="" width="64" height="64">
+                <span class="drawer-line-text">
+                    <a href="{{ path('app_product', {slug: line.product.slug}) }}">{{ line.product.name }}</a>
+                    <span class="text-muted-blue">{{ line.quantity }} × {{ line.product.priceCents|price }}</span>
+                </span>
+                <strong class="text-nowrap">{{ line.totalCents|price }}</strong>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="drawer-total"><span>Total</span><strong>{{ total|price }}</strong></div>
+    <a href="{{ path('app_checkout') }}" class="btn btn-primary btn-lg w-100 mt-3">Valider le bon</a>
+    <a href="{{ path('app_cart') }}" class="btn btn-outline-light w-100 mt-3">Voir le bon de commande</a>
+{% endif %}

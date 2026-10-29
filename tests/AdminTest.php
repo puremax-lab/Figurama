@@ -23,8 +23,8 @@ final class AdminTest extends AppWebTestCase
         $this->client->request('GET', '/admin');
 
         $this->assertResponseIsSuccessful();
-        // Delivered 87,70 + shipped 44,90 + paid 114,60 (demo orders)
-        $this->assertSelectorTextContains('.counter', '247,20');
+        // Demo orders: 87,70 + 44,90 + 114,60, plus three reviewers' orders 94,80 + 104,70 + 84,70
+        $this->assertSelectorTextContains('.counter', '531,40');
         $this->assertSelectorTextContains('main', 'Hibou de bronze');
         $this->assertSelectorTextContains('main', 'Robot à remontoir');
     }

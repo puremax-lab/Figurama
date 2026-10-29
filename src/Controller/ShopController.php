@@ -3,8 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Review;
+use App\Entity\User;
+use App\Form\ReviewForm;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Repository\ReviewRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,16 +63,41 @@ final class ShopController extends AbstractController
         ]);
     }
 
-    #[Route('/produit/{slug}', name: 'app_product')]
-    public function show(#[MapEntity(mapping: ['slug' => 'slug'])] Product $product, ProductRepository $products): Response
-    {
+    /** Product page. Customers who bought the piece can also post their review here. */
+    #[Route('/produit/{slug}', name: 'app_product', methods: ['GET', 'POST'])]
+    public function show(
+        #[MapEntity(mapping: ['slug' => 'slug'])] Product $product,
+        Request $request,
+        ProductRepository $products,
+        ReviewRepository $reviews,
+        EntityManagerInterface $em,
+    ): Response {
         if (!$product->isActive()) {
             throw $this->createNotFoundException();
+        }
+
+        $user = $this->getUser();
+        $form = null;
+        if ($user instanceof User && $reviews->canReview($user, $product)) {
+            $review = new Review($product, $user);
+            $form = $this->createForm(ReviewForm::class, $review, ['action' => $this->generateUrl('app_product', ['slug' => $product->getSlug()]) . '#avis']);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->persist($review);
+                $em->flush();
+                $this->addFlash('success', 'Merci, votre avis est publié.');
+
+                return $this->redirect($this->generateUrl('app_product', ['slug' => $product->getSlug()]) . '#avis');
+            }
+        } elseif ($request->isMethod('POST')) {
+            throw $this->createAccessDeniedException('Seuls les clients qui ont reçu cette pièce peuvent la noter.');
         }
 
         return $this->render('shop/show.html.twig', [
             'product' => $product,
             'similar' => $products->similar($product, 4),
-        ]);
+            'reviews' => $reviews->forProduct($product),
+            'review_form' => $form,
+        ], new Response(status: $form?->isSubmitted() ? 422 : 200));
     }
 }
