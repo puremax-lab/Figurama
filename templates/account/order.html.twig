@@ -11,11 +11,11 @@
 
     {% if order.status.value == 'pending' %}
         <div class="alert alert-warning d-flex flex-wrap align-items-center gap-3">
-            <span class="me-auto">Commande non payée : les pièces restent réservées pour vous.</span>
+            <span class="me-auto">Commande non payée : les figurines restent réservées pour vous.</span>
             <a href="{{ path('app_payment', {reference: order.reference}) }}" class="btn btn-sm btn-primary">Payer maintenant</a>
             <form method="post" action="{{ path('app_account_order_cancel', {reference: order.reference}) }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ order.reference) }}">
-                <button class="btn btn-sm btn-dark">Annuler la commande</button>
+                <button class="btn btn-sm btn-outline">Annuler la commande</button>
             </form>
         </div>
     {% endif %}

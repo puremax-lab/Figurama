@@ -12,15 +12,13 @@ Online shop for collectible figurines, built with **Symfony 7.4**: catalogue, ca
 
 ## The idea
 
-Figurines are scale models, so the shop is designed like an **engineering drawing**: blue gridded paper, monospaced text, a reference code for every piece (`FAN-001`), dimension lines on the photos and a technical sheet with height, scale and material. On top of that, a touch of **convention fanzine**: prices are tilted stickers, out-of-stock items get a red rubber stamp, buttons have hard shadows.
-
-The cart is called a *bon de commande* (order form), the back office *l'atelier* (the workshop).
+A small, quiet boutique rather than a busy marketplace: cream background, beige and powder pink, a serif for titles (Cormorant Garamond) and a light sans-serif for the rest (Jost), with plenty of space around the photos. Each piece still has its technical details (reference, height, scale, material), shown in a simple list on its page.
 
 ## What you can do
 
 **As a customer**
 - Browse the catalogue by series, search, sort by price, hide out-of-stock pieces; more pieces load automatically while scrolling
-- Read a technical sheet for each piece and add it to the order form (never more than the stock)
+- Read the details of each piece and add it to the cart (never more than the stock)
 - Enter a shipping address and pay with **Stripe Checkout** (test cards), or with the built-in demo payment when no Stripe key is set
 - Follow your orders, pay later or cancel an unpaid order
 
@@ -38,11 +36,11 @@ The cart is called a *bon de commande* (order form), the back office *l'atelier*
 - **Stripe without the SDK** ([`StripeClient`](src/Payment/StripeClient.php)): Checkout sessions created with Symfony HttpClient, payment checked again when the customer comes back, and a webhook whose **signature is verified** (HMAC-SHA256, 5-minute tolerance). Marking an order as paid is idempotent, because Stripe may send the same event twice.
 - **Infinite scroll without a library** ([`app.js`](assets/app.js)): an `IntersectionObserver` fetches the next page when the "load more" link gets close, and the controller returns only the new cards. Without JavaScript, the link simply opens the next page.
 - **Security**: login throttling, hashed passwords, CSRF tokens on every form that changes data, and a **voter** ([`OrderVoter`](src/Security/OrderVoter.php)) so customers only see their own orders.
-- **Front end**: Bootstrap provides the grid and base components, but the whole look comes from a single hand-written stylesheet ([`app.css`](assets/styles/app.css)) with IBM Plex Mono and Archivo Black.
+- **Front end**: Bootstrap provides the grid and base components, but the whole look comes from a single hand-written stylesheet ([`app.css`](assets/styles/app.css)) with Cormorant Garamond and Jost.
 
 ## Screens
 
-| Product sheet | Order form |
+| Product page | Cart |
 |---|---|
 | ![Product](docs/screenshots/product.png) | ![Cart](docs/screenshots/cart.png) |
 

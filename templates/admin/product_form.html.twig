@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ is_new ? 'Nouvelle pièce' : product.name }}{% endblock %}
+{% block title %}{{ is_new ? 'Nouvelle figurine' : product.name }}{% endblock %}
 
 {% block body %}
-    <a href="{{ path('admin_products') }}" class="small">← Pièces</a>
-    <h1 class="my-3">{{ is_new ? 'Nouvelle pièce' : product.name }}</h1>
+    <a href="{{ path('admin_products') }}" class="small">← Figurines</a>
+    <h1 class="my-3">{{ is_new ? 'Nouvelle figurine' : product.name }}</h1>
 
     <div class="panel" style="max-width: 820px">
         {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}

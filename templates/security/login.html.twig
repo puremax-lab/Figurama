@@ -5,7 +5,7 @@
 {% block body %}
     <div class="row justify-content-center">
         <div class="col-md-7 col-lg-5">
-            <p class="eyebrow mb-2">Accès client</p>
+            <p class="eyebrow mb-2">Espace client</p>
             <h1 class="mb-4">Connexion</h1>
             <div class="panel">
                 {% if error %}
@@ -24,7 +24,7 @@
                     <button class="btn btn-primary w-100">Se connecter</button>
                 </form>
             </div>
-            <p class="small text-muted-blue mt-3">Démo : <span class="text-white">client@figurama.test</span> ou <span class="text-white">admin@figurama.test</span>, mot de passe <span class="text-white">password</span>.</p>
+            <p class="small text-soft mt-3">Démo : <span class="fw-medium">client@figurama.test</span> ou <span class="fw-medium">admin@figurama.test</span>, mot de passe <span class="fw-medium">password</span>.</p>
             <p>Pas encore de compte ? <a href="{{ path('app_register') }}">Inscription</a></p>
         </div>
     </div>

@@ -3,20 +3,20 @@
 {% block title %}Mon compte{% endblock %}
 
 {% block body %}
-    <p class="eyebrow mb-2">Compte client · {{ app.user.email }}</p>
+    <p class="eyebrow mb-2">{{ app.user.email }}</p>
     <h1 class="mb-4">Bonjour {{ app.user.firstName }}</h1>
 
-    <h2 class="section-title"><span class="num">01</span> Mes commandes</h2>
+    <h2 class="section-title text-start mt-4">Mes commandes</h2>
     {% if orders is empty %}
         <div class="panel text-center py-4">
-            <p class="text-muted-blue mb-3">Vous n'avez pas encore passé de commande.</p>
-            <a href="{{ path('app_shop') }}" class="btn btn-primary">Ouvrir le catalogue</a>
+            <p class="text-soft mb-3">Vous n'avez pas encore passé de commande.</p>
+            <a href="{{ path('app_shop') }}" class="btn btn-primary">Découvrir la boutique</a>
         </div>
     {% else %}
         <div class="panel p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead><tr><th class="ps-3">Référence</th><th>Date</th><th>Pièces</th><th>Total</th><th class="pe-3">Statut</th></tr></thead>
+                    <thead><tr><th class="ps-3">Référence</th><th>Date</th><th>Articles</th><th>Total</th><th class="pe-3">Statut</th></tr></thead>
                     <tbody>
                         {% for order in orders %}
                             <tr>

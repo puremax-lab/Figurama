@@ -59,7 +59,7 @@ abstract class AppWebTestCase extends WebTestCase
     {
         $product = $this->product($name);
         $crawler = $this->client->request('GET', '/produit/' . $product->getSlug());
-        $form = $crawler->selectButton('Ajouter au bon de commande')->form(['quantity' => $quantity]);
+        $form = $crawler->selectButton('Ajouter au panier')->form(['quantity' => $quantity]);
         $this->client->submit($form);
     }
 

@@ -3,9 +3,9 @@
 {% block title %}{{ current_category ? current_category.name : 'Catalogue' }}{% endblock %}
 
 {% block body %}
-    <p class="eyebrow mb-2">{{ current_category ? 'Série ' ~ current_category.code : 'Catalogue général' }}</p>
-    <h1 class="mb-1">{{ current_category ? current_category.name : 'Toutes les pièces' }}</h1>
-    <p class="text-muted-blue mb-4">{{ total }} pièce{{ total > 1 ? 's' }} trouvée{{ total > 1 ? 's' }}</p>
+    <p class="eyebrow mb-2">{{ current_category ? 'Collection' : 'Boutique' }}</p>
+    <h1 class="mb-1">{{ current_category ? current_category.name : 'Toutes les figurines' }}</h1>
+    <p class="text-soft mb-4">{{ total }} figurine{{ total > 1 ? 's' }}</p>
 
     <form method="get" class="panel mb-5">
         <div class="row g-3 align-items-end">
@@ -14,18 +14,18 @@
                 <input type="search" id="q" name="q" value="{{ query }}" class="form-control" placeholder="dragon, robot, bronze…">
             </div>
             <div class="col-6 col-md-3">
-                <label for="categorie" class="form-label">Série</label>
+                <label for="categorie" class="form-label">Collection</label>
                 <select id="categorie" name="categorie" class="form-select">
                     <option value="">Toutes</option>
                     {% for item in categories %}
-                        <option value="{{ item.category.slug }}" {{ current_category and current_category.id == item.category.id ? 'selected' }}>{{ item.category.code }} · {{ item.category.name }}</option>
+                        <option value="{{ item.category.slug }}" {{ current_category and current_category.id == item.category.id ? 'selected' }}>{{ item.category.name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-6 col-md-2">
                 <label for="tri" class="form-label">Tri</label>
                 <select id="tri" name="tri" class="form-select">
-                    {% for value, label in {'nouveautes': 'Nouveautés', 'prix-croissant': 'Prix ↑', 'prix-decroissant': 'Prix ↓', 'nom': 'Nom'} %}
+                    {% for value, label in {'nouveautes': 'Nouveautés', 'prix-croissant': 'Prix croissant', 'prix-decroissant': 'Prix décroissant', 'nom': 'Nom'} %}
                         <option value="{{ value }}" {{ sort == value ? 'selected' }}>{{ label }}</option>
                     {% endfor %}
                 </select>
@@ -48,9 +48,9 @@
         </div>
     {% else %}
         <div class="panel text-center py-5">
-            <p class="display fs-3 mb-2">Aucune pièce</p>
-            <p class="text-muted-blue">Rien ne correspond à cette recherche.</p>
-            <a href="{{ path('app_shop') }}" class="btn btn-outline-light">Tout le catalogue</a>
+            <p class="display fs-3 mb-2">Aucune figurine</p>
+            <p class="text-soft">Rien ne correspond à cette recherche.</p>
+            <a href="{{ path('app_shop') }}" class="btn btn-outline">Tout le catalogue</a>
         </div>
     {% endif %}
 

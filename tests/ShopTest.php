@@ -14,8 +14,8 @@ final class ShopTest extends AppWebTestCase
         $crawler = $this->client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Figurines');
-        $this->assertCount(3, $crawler->filter('.index-link'));
+        $this->assertSelectorTextContains('h1', 'choisies avec soin');
+        $this->assertCount(3, $crawler->filter('.category-tile'));
         $this->assertCount(4, $crawler->filter('.plate'));
     }
 
@@ -66,7 +66,7 @@ final class ShopTest extends AppWebTestCase
         $this->client->request('GET', '/produit/patrouille-nocturne');
 
         $this->assertSelectorTextContains('h1', 'Patrouille nocturne');
-        $this->assertSelectorTextContains('.sticker-big', '64,90');
+        $this->assertSelectorTextContains('.price-big', '64,90');
         $this->assertSelectorTextContains('.cartouche', '1/72');
         $this->assertSelectorTextContains('.cartouche', '2 pièces');
     }

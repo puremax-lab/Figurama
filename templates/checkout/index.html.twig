@@ -22,7 +22,7 @@
         </div>
         <div class="col-lg-5">
             <div class="cartouche">
-                <div class="cartouche-head"><span>Votre bon</span><span>{{ lines|length }} ligne{{ lines|length > 1 ? 's' }}</span></div>
+                <div class="cartouche-head"><span>Votre commande</span><span>{{ lines|length }} ligne{{ lines|length > 1 ? 's' }}</span></div>
                 <dl>
                     {% for line in lines %}
                         <dt>{{ line.quantity }} ×</dt><dd class="d-flex justify-content-between gap-2"><span>{{ line.product.name }}</span><span class="text-nowrap">{{ line.totalCents|price }}</span></dd>
@@ -30,7 +30,7 @@
                     <dt>Total</dt><dd class="text-end fw-bold fs-5">{{ total|price }}</dd>
                 </dl>
             </div>
-            <p class="small text-muted-blue mt-3">Les pièces sont réservées dès que vous validez cette étape.</p>
+            <p class="small text-soft mt-3">Les figurines sont réservées dès que vous validez cette étape.</p>
         </div>
     </div>
 {% endblock %}

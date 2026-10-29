@@ -1,41 +1,42 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <section class="hero row g-4 g-lg-5 align-items-end mb-4">
-        <div class="col-lg-7">
-            <p class="eyebrow mb-3">Planche 01 · Catalogue général</p>
-            <h1>Figurines<br>à&nbsp;l'échelle.</h1>
-            <p class="lead mt-4">Dragons, robots en tôle, astronautes et curiosités. Chaque pièce est référencée, mesurée et peinte à la main avant de partir de l'atelier.</p>
-            <a href="{{ path('app_shop') }}" class="btn btn-primary btn-lg mt-2">Ouvrir le catalogue</a>
+    <section class="hero row g-5 align-items-center">
+        <div class="col-lg-6 order-2 order-lg-1">
+            <p class="eyebrow mb-3">Figurines de collection</p>
+            <h1>Des petites pièces, choisies avec soin.</h1>
+            <p class="lead mt-4">Dragons, robots en tôle, astronautes et curiosités. Chaque figurine est peinte à la main, emballée avec attention et envoyée sous 48 heures.</p>
+            <a href="{{ path('app_shop') }}" class="btn btn-primary btn-lg mt-3">Découvrir la boutique</a>
         </div>
-        <div class="col-lg-5">
-            <div class="position-relative">
-                <span class="sticker sticker-red hero-sticker">Livraison offerte</span>
-                <div class="cartouche">
-                    <div class="cartouche-head"><span>Figurama</span><span>Réf. CAT-2026</span></div>
-                    <dl>
-                        <dt>Pièces</dt><dd>{{ categories|reduce((sum, item) => sum + item.products, 0) }} modèles au catalogue</dd>
-                        <dt>Échelles</dt><dd>du 1/72 au 1/4</dd>
-                        <dt>Finition</dt><dd>peinture à la main, vernis mat</dd>
-                        <dt>Expédition</dt><dd>sous 48 h · BE · FR · LU · NL</dd>
-                        <dt>Paiement</dt><dd>Stripe, carte bancaire</dd>
-                    </dl>
+        <div class="col-lg-5 offset-lg-1 order-1 order-lg-2">
+            {% if featured is not empty %}
+                {% set star = featured|first %}
+                <div class="position-relative">
+                    <div class="hero-photo"><img src="{{ star.imageUrl|replace({'w=900': 'w=1100'}) }}" alt="{{ star.name }}" width="800" height="1000"></div>
+                    <a href="{{ path('app_product', {slug: star.slug}) }}" class="hero-note position-absolute bottom-0 start-0 m-3 text-decoration-none text-reset">
+                        <span class="eyebrow d-block">Coup de cœur</span>
+                        <strong class="d-block" style="font-family: var(--serif); font-size: 1.25rem">{{ star.name }}</strong>
+                        <span class="text-soft">{{ star.priceCents|price }}</span>
+                    </a>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </section>
 
-    <h2 class="section-title"><span class="num">02</span> Index des séries</h2>
-    <div>
+    <h2 class="section-title">Les collections</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-3">
         {% for item in categories %}
-            <a href="{{ path('app_shop', {categorie: item.category.slug}) }}" class="index-link">
-                <span><span class="code">{{ item.category.code }}</span><strong>{{ item.category.name }}</strong></span>
-                <span class="text-muted-blue">{{ item.products }} pièces →</span>
-            </a>
+            <div class="col">
+                <a href="{{ path('app_shop', {categorie: item.category.slug}) }}" class="category-tile">
+                    <strong>{{ item.category.name }}</strong>
+                    <span>{{ item.products }} figurines</span>
+                </a>
+            </div>
         {% endfor %}
     </div>
 
-    <h2 class="section-title"><span class="num">03</span> Sélection de l'atelier</h2>
+    <h2 class="section-title">Sélection de l'atelier</h2>
+    <p class="section-intro">Les pièces que l'on préfère en ce moment.</p>
     <div class="row row-cols-2 row-cols-lg-4 g-4">
         {% for product in featured %}
             <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>

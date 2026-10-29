@@ -3,7 +3,7 @@
         <div class="panel p-0">
             <div class="table-responsive">
                 <table class="table mb-0">
-                    <thead><tr><th class="ps-3">Pièce</th><th class="text-end">Prix</th><th class="text-end">Qté</th><th class="text-end pe-3">Montant</th></tr></thead>
+                    <thead><tr><th class="ps-3">Figurine</th><th class="text-end">Prix</th><th class="text-end">Qté</th><th class="text-end pe-3">Montant</th></tr></thead>
                     <tbody>
                         {% for item in order.items %}
                             <tr>
@@ -21,7 +21,7 @@
     </div>
     <div class="col-lg-4">
         <div class="cartouche">
-            <div class="cartouche-head"><span>Expédition</span><span>{{ order.shippingCountry }}</span></div>
+            <div class="cartouche-head"><span>Livraison</span><span>{{ order.shippingCountry }}</span></div>
             <dl>
                 <dt>Nom</dt><dd>{{ order.shippingName }}</dd>
                 <dt>Adresse</dt><dd>{{ order.shippingAddress }}<br>{{ order.shippingPostalCode }} {{ order.shippingCity }}<br>{{ country_name(order.shippingCountry) }}</dd>
