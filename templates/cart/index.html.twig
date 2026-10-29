@@ -1,65 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %}
+{% block title %}Bon de commande{% endblock %}
 
 {% block body %}
-    <h1 class="mb-4">Panier</h1>
+    <p class="eyebrow mb-2">Document provisoire</p>
+    <h1 class="mb-4">Bon de commande</h1>
 
     {% if lines is empty %}
-        <div class="text-center py-5">
-            <p class="fs-1 mb-2" aria-hidden="true">🛍️</p>
-            <p class="text-body-secondary">Votre panier est vide.</p>
-            <a href="{{ path('app_shop') }}" class="btn btn-primary">Découvrir la boutique</a>
+        <div class="panel text-center py-5">
+            <p class="display fs-3 mb-2">Bon vide</p>
+            <p class="text-muted-blue">Aucune pièce n'a encore été ajoutée.</p>
+            <a href="{{ path('app_shop') }}" class="btn btn-primary">Ouvrir le catalogue</a>
         </div>
     {% else %}
         <div class="row g-4">
             <div class="col-lg-8">
-                <div class="card border-0 shadow-sm">
-                    <ul class="list-group list-group-flush">
-                        {% for line in lines %}
-                            <li class="list-group-item py-3">
-                                <div class="d-flex gap-3 align-items-center">
-                                    <div class="product-visual product-visual-small" style="background: {{ line.product.color }}" aria-hidden="true">{{ line.product.icon }}</div>
-                                    <div class="flex-grow-1">
-                                        <a href="{{ path('app_product', {slug: line.product.slug}) }}" class="fw-semibold text-body text-decoration-none">{{ line.product.name }}</a>
-                                        <div class="small text-body-secondary">{{ line.product.priceCents|price }} l'unité</div>
-                                    </div>
-                                    <strong class="text-nowrap">{{ line.totalCents|price }}</strong>
-                                </div>
-                                <div class="d-flex gap-2 justify-content-end mt-2">
-                                    <form method="post" action="{{ path('app_cart_update', {id: line.product.id}) }}" class="d-flex gap-2">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
-                                        <label for="qty-{{ line.product.id }}" class="visually-hidden">Quantité de {{ line.product.name }}</label>
-                                        <input type="number" id="qty-{{ line.product.id }}" name="quantity" value="{{ line.quantity }}" min="0" max="{{ min(line.product.stock, 10) }}" class="form-control form-control-sm qty-input">
-                                        <button class="btn btn-sm btn-outline-dark">Mettre à jour</button>
-                                    </form>
-                                    <form method="post" action="{{ path('app_cart_remove', {id: line.product.id}) }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
-                                        <button class="btn btn-sm btn-outline-danger" aria-label="Retirer {{ line.product.name }}"><i class="bi bi-trash"></i></button>
-                                    </form>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                <div class="panel p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead><tr><th class="ps-3">Réf.</th><th>Pièce</th><th>Qté</th><th class="text-end pe-3">Montant</th></tr></thead>
+                            <tbody>
+                                {% for line in lines %}
+                                    <tr>
+                                        <td class="ps-3 text-muted-blue">{{ line.product.reference }}</td>
+                                        <td>
+                                            <a href="{{ path('app_product', {slug: line.product.slug}) }}" class="text-white">{{ line.product.name }}</a>
+                                            <div class="small text-muted-blue">{{ line.product.priceCents|price }} / pièce</div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <form method="post" action="{{ path('app_cart_update', {id: line.product.id}) }}" class="d-flex gap-2">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
+                                                    <label for="qty-{{ line.product.id }}" class="visually-hidden">Quantité de {{ line.product.name }}</label>
+                                                    <input type="number" id="qty-{{ line.product.id }}" name="quantity" value="{{ line.quantity }}" min="0" max="{{ min(line.product.stock, 10) }}" class="form-control form-control-sm qty-input">
+                                                    <button class="btn btn-sm btn-outline-light">Mettre à jour</button>
+                                                </form>
+                                                <form method="post" action="{{ path('app_cart_remove', {id: line.product.id}) }}">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
+                                                    <button class="btn btn-sm btn-danger-line" aria-label="Retirer {{ line.product.name }}">×</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                        <td class="text-end pe-3 text-nowrap">{{ line.totalCents|price }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <form method="post" action="{{ path('app_cart_clear') }}" class="mt-2">
                     <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
-                    <button class="btn btn-link btn-sm text-danger px-0">Vider le panier</button>
+                    <button class="btn btn-link btn-sm px-0">Vider le bon</button>
                 </form>
             </div>
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm sticky-summary">
-                    <div class="card-body">
-                        <h2 class="h5">Récapitulatif</h2>
-                        <dl class="row mb-0">
-                            <dt class="col-7 fw-normal">Sous-total</dt><dd class="col-5 text-end">{{ total|price }}</dd>
-                            <dt class="col-7 fw-normal">Livraison</dt><dd class="col-5 text-end text-success">Offerte</dd>
-                            <dt class="col-7 fs-5">Total</dt><dd class="col-5 text-end fs-5 fw-bold">{{ total|price }}</dd>
-                        </dl>
-                        <a href="{{ path('app_checkout') }}" class="btn btn-primary btn-lg w-100 mt-3">Commander</a>
-                        {% if not app.user %}<p class="small text-body-secondary text-center mt-2 mb-0">Vous devrez vous connecter ou créer un compte.</p>{% endif %}
-                    </div>
+                <div class="cartouche">
+                    <div class="cartouche-head"><span>Récapitulatif</span><span>EUR</span></div>
+                    <dl>
+                        <dt>Sous-total</dt><dd class="text-end">{{ total|price }}</dd>
+                        <dt>Livraison</dt><dd class="text-end">offerte</dd>
+                        <dt>Total TTC</dt><dd class="text-end fw-bold fs-5">{{ total|price }}</dd>
+                    </dl>
                 </div>
+                <a href="{{ path('app_checkout') }}" class="btn btn-primary btn-lg w-100 mt-4">Valider le bon</a>
+                {% if not app.user %}<p class="small text-muted-blue mt-3 mb-0">Un compte est demandé à l'étape suivante.</p>{% endif %}
             </div>
         </div>
     {% endif %}

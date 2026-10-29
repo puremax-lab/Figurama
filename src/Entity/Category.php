@@ -19,14 +19,15 @@ class Category
     #[ORM\Column(length: 60, unique: true)]
     private string $slug;
 
-    #[ORM\Column(length: 16)]
-    private string $icon;
+    /** Three letters used in product references, for example FAN. */
+    #[ORM\Column(length: 3)]
+    private string $code;
 
-    public function __construct(string $name, string $slug, string $icon)
+    public function __construct(string $name, string $slug, string $code)
     {
         $this->name = $name;
         $this->slug = $slug;
-        $this->icon = $icon;
+        $this->code = $code;
     }
 
     public function getId(): ?int
@@ -44,9 +45,9 @@ class Category
         return $this->slug;
     }
 
-    public function getIcon(): string
+    public function getCode(): string
     {
-        return $this->icon;
+        return $this->code;
     }
 
     public function __toString(): string

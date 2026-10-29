@@ -8,7 +8,7 @@ final class CheckoutTest extends AppWebTestCase
 {
     public function testCheckoutRequiresAnAccount(): void
     {
-        $this->addToCart('Dragon des cendres');
+        $this->addToCart('Dragon de rubis');
         $this->client->request('GET', '/commande');
 
         $this->assertResponseRedirects('/connexion');
@@ -25,7 +25,7 @@ final class CheckoutTest extends AppWebTestCase
     public function testPlacingAnOrderReservesTheStockAndEmptiesTheCart(): void
     {
         $this->loginAs('client@figurama.test');
-        $this->addToCart('Dragon des cendres', 2); // stock: 6
+        $this->addToCart('Dragon de rubis', 2); // stock: 6
         $this->checkout();
 
         $order = $this->latestOrder();
@@ -33,16 +33,16 @@ final class CheckoutTest extends AppWebTestCase
         $this->assertSame(OrderStatus::Pending, $order->getStatus());
         $this->assertSame(9980, $order->getTotalCents());
         $this->assertSame('Bruxelles', $order->getShippingCity());
-        $this->assertSame(4, $this->product('Dragon des cendres')->getStock());
+        $this->assertSame(4, $this->product('Dragon de rubis')->getStock());
 
         $this->client->request('GET', '/panier');
-        $this->assertSelectorTextContains('main', 'Votre panier est vide.');
+        $this->assertSelectorTextContains('main', 'Aucune pièce n\'a encore été ajoutée.');
     }
 
     public function testShowsErrorsForAnInvalidAddress(): void
     {
         $this->loginAs('client@figurama.test');
-        $this->addToCart('Dragon des cendres');
+        $this->addToCart('Dragon de rubis');
         $crawler = $this->client->request('GET', '/commande');
         $this->client->submit($crawler->selectButton('Continuer vers le paiement')->form([
             'shipping_form[shippingAddress]' => '',
@@ -51,15 +51,15 @@ final class CheckoutTest extends AppWebTestCase
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertSelectorTextContains('main', 'Code postal invalide.');
-        $this->assertSame(6, $this->product('Dragon des cendres')->getStock());
+        $this->assertSame(6, $this->product('Dragon de rubis')->getStock());
     }
 
     public function testOnlyOrdersWhatIsStillInStock(): void
     {
         $this->loginAs('client@figurama.test');
-        $this->addToCart('Licorne des brumes', 2);
+        $this->addToCart('Patrouille nocturne', 2);
         // Someone else buys one while the customer is still shopping.
-        $unicorn = $this->product('Licorne des brumes');
+        $unicorn = $this->product('Patrouille nocturne');
         $unicorn->setStock(1);
         $this->em->flush();
 
@@ -67,17 +67,17 @@ final class CheckoutTest extends AppWebTestCase
 
         $order = $this->latestOrder();
         $this->assertSame(1, $order->getItems()->first()->getQuantity());
-        $this->assertSame(0, $this->product('Licorne des brumes')->getStock());
+        $this->assertSame(0, $this->product('Patrouille nocturne')->getStock());
     }
 
     public function testDemoPaymentMarksTheOrderAsPaid(): void
     {
         $this->loginAs('client@figurama.test');
-        $this->addToCart('Robot explorateur R-7');
+        $this->addToCart('Duo de robots en tôle');
         $this->checkout();
         $crawler = $this->client->followRedirect();
 
-        $this->assertSelectorTextContains('main', 'Mode démonstration');
+        $this->assertSelectorTextContains('main', 'Mode démo');
         $this->client->submit($crawler->filter('form[action$="paiement-demo"]')->form());
         $this->client->followRedirect();
 
@@ -90,21 +90,21 @@ final class CheckoutTest extends AppWebTestCase
     public function testCustomerCanCancelAnUnpaidOrderAndTheStockComesBack(): void
     {
         $this->loginAs('client@figurama.test');
-        $this->addToCart('Ninja de minuit', 3); // stock: 3
+        $this->addToCart('Nain à la pipe', 3); // stock: 3
         $this->checkout();
-        $this->assertSame(0, $this->product('Ninja de minuit')->getStock());
+        $this->assertSame(0, $this->product('Nain à la pipe')->getStock());
 
         $crawler = $this->client->request('GET', '/compte/commandes/' . $this->latestOrder()->getReference());
         $this->client->submit($crawler->selectButton('Annuler la commande')->form());
 
         $this->assertSame(OrderStatus::Cancelled, $this->latestOrder()->getStatus());
-        $this->assertSame(3, $this->product('Ninja de minuit')->getStock());
+        $this->assertSame(3, $this->product('Nain à la pipe')->getStock());
     }
 
     public function testCustomersCannotSeeOtherCustomersOrders(): void
     {
         $this->loginAs('client@figurama.test');
-        $this->addToCart('Panda gourmand');
+        $this->addToCart('Mannequin d\'atelier');
         $this->checkout();
         $reference = $this->latestOrder()->getReference();
 

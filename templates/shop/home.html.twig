@@ -1,41 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <section class="hero p-4 p-md-5 mb-5">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-7">
-                <p class="text-uppercase fw-bold small text-primary mb-2">Figurines de collection</p>
-                <h1 class="display-5 fw-bold">Des héros, des dragons et des robots pour vos étagères.</h1>
-                <p class="lead text-body-secondary">Des figurines peintes à la main, livrées gratuitement en Belgique, en France, au Luxembourg et aux Pays-Bas.</p>
-                <a href="{{ path('app_shop') }}" class="btn btn-primary btn-lg">Découvrir la boutique</a>
-            </div>
-            <div class="col-lg-5 text-center hero-icons" aria-hidden="true">🐉🤖<br>🦊🦸</div>
+    <section class="hero row g-4 g-lg-5 align-items-end mb-4">
+        <div class="col-lg-7">
+            <p class="eyebrow mb-3">Planche 01 · Catalogue général</p>
+            <h1>Figurines<br>à&nbsp;l'échelle.</h1>
+            <p class="lead mt-4">Dragons, robots en tôle, astronautes et curiosités. Chaque pièce est référencée, mesurée et peinte à la main avant de partir de l'atelier.</p>
+            <a href="{{ path('app_shop') }}" class="btn btn-primary btn-lg mt-2">Ouvrir le catalogue</a>
         </div>
-    </section>
-
-    <section class="mb-5">
-        <h2 class="h4 mb-3">Catégories</h2>
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
-            {% for item in categories %}
-                <div class="col">
-                    <a href="{{ path('app_shop', {categorie: item.category.slug}) }}" class="category-chip shadow-sm h-100">
-                        <span aria-hidden="true">{{ item.category.icon }}</span>
-                        <span><strong class="d-block">{{ item.category.name }}</strong><span class="small text-body-secondary">{{ item.products }} figurines</span></span>
-                    </a>
+        <div class="col-lg-5">
+            <div class="position-relative">
+                <span class="sticker sticker-red hero-sticker">Livraison offerte</span>
+                <div class="cartouche">
+                    <div class="cartouche-head"><span>Figurama</span><span>Réf. CAT-2026</span></div>
+                    <dl>
+                        <dt>Pièces</dt><dd>{{ categories|reduce((sum, item) => sum + item.products, 0) }} modèles au catalogue</dd>
+                        <dt>Échelles</dt><dd>du 1/72 au 1/4</dd>
+                        <dt>Finition</dt><dd>peinture à la main, vernis mat</dd>
+                        <dt>Expédition</dt><dd>sous 48 h · BE · FR · LU · NL</dd>
+                        <dt>Paiement</dt><dd>Stripe, carte bancaire</dd>
+                    </dl>
                 </div>
-            {% endfor %}
+            </div>
         </div>
     </section>
 
-    <section>
-        <div class="d-flex justify-content-between align-items-baseline mb-3">
-            <h2 class="h4 mb-0">Coups de cœur</h2>
-            <a href="{{ path('app_shop') }}">Tout voir <i class="bi bi-arrow-right"></i></a>
-        </div>
-        <div class="row row-cols-2 row-cols-lg-4 g-3">
-            {% for product in featured %}
-                <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>
-            {% endfor %}
-        </div>
-    </section>
+    <h2 class="section-title"><span class="num">02</span> Index des séries</h2>
+    <div>
+        {% for item in categories %}
+            <a href="{{ path('app_shop', {categorie: item.category.slug}) }}" class="index-link">
+                <span><span class="code">{{ item.category.code }}</span><strong>{{ item.category.name }}</strong></span>
+                <span class="text-muted-blue">{{ item.products }} pièces →</span>
+            </a>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title"><span class="num">03</span> Sélection de l'atelier</h2>
+    <div class="row row-cols-2 row-cols-lg-4 g-4">
+        {% for product in featured %}
+            <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>
+        {% endfor %}
+    </div>
 {% endblock %}

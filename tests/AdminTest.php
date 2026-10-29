@@ -23,10 +23,10 @@ final class AdminTest extends AppWebTestCase
         $this->client->request('GET', '/admin');
 
         $this->assertResponseIsSuccessful();
-        // Delivered 95,70 + shipped 39,90 + paid 79,60 (demo orders)
-        $this->assertSelectorTextContains('.stat-card', '215,20');
-        $this->assertSelectorTextContains('main', 'Hibou érudit');
-        $this->assertSelectorTextContains('main', 'Astronaute en apesanteur');
+        // Delivered 87,70 + shipped 44,90 + paid 114,60 (demo orders)
+        $this->assertSelectorTextContains('.counter', '247,20');
+        $this->assertSelectorTextContains('main', 'Hibou de bronze');
+        $this->assertSelectorTextContains('main', 'Robot à remontoir');
     }
 
     public function testShipsThenDeliversAnOrder(): void
@@ -37,7 +37,7 @@ final class AdminTest extends AppWebTestCase
         $crawler = $this->client->request('GET', '/admin/commandes/' . $order->getReference());
         $this->client->submit($crawler->selectButton('Marquer comme expédiée')->form());
         $crawler = $this->client->followRedirect();
-        $this->assertSelectorTextContains('.badge', 'Expédiée');
+        $this->assertSelectorTextContains('main .status', 'Expédiée');
 
         $this->client->submit($crawler->selectButton('Marquer comme livrée')->form());
         $this->assertSame(OrderStatus::Delivered, $this->orderByReference($order->getReference())->getStatus());
@@ -46,14 +46,14 @@ final class AdminTest extends AppWebTestCase
     public function testCancellingAPaidOrderPutsTheItemsBackInStock(): void
     {
         $this->loginAs('admin@figurama.test');
-        $order = $this->orderWithStatus(OrderStatus::Paid); // 1 super-heroine + 3 pixel ghosts
-        $before = $this->product('Fantôme pixel')->getStock();
+        $order = $this->orderWithStatus(OrderStatus::Paid); // 1 winged diver + 3 lunar astronauts
+        $before = $this->product('Astronaute lunaire')->getStock();
 
         $crawler = $this->client->request('GET', '/admin/commandes/' . $order->getReference());
         $this->client->submit($crawler->selectButton('Annuler et remettre en stock')->form());
 
         $this->assertSame(OrderStatus::Cancelled, $this->orderByReference($order->getReference())->getStatus());
-        $this->assertSame($before + 3, $this->product('Fantôme pixel')->getStock());
+        $this->assertSame($before + 3, $this->product('Astronaute lunaire')->getStock());
     }
 
     public function testRefusesAnImpossibleStatusChange(): void
@@ -84,10 +84,12 @@ final class AdminTest extends AppWebTestCase
             'product_form[description]' => 'Golem massif taillé dans une pierre grise, yeux de cristal bleu.',
             'product_form[priceCents]' => '44,90',
             'product_form[stock]' => '5',
-            'product_form[icon]' => '🗿',
-            'product_form[color]' => '#e5e5e5',
+            'product_form[imageUrl]' => 'https://images.unsplash.com/photo-1592628457982-c4181aeecbd7',
+            'product_form[heightCm]' => '16',
+            'product_form[scale]' => '1/10',
+            'product_form[material]' => 'Pierre reconstituée',
         ]);
-        $form['product_form[category]']->select((string) $this->product('Dragon des cendres')->getCategory()->getId());
+        $form['product_form[category]']->select((string) $this->product('Dragon de rubis')->getCategory()->getId());
         $this->client->submit($form);
 
         $this->assertResponseRedirects('/admin/produits');

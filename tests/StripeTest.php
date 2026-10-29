@@ -59,14 +59,14 @@ final class StripeTest extends AppWebTestCase
         parse_str($sent['body'], $body);
         $this->assertSame('payment', $body['mode']);
         $this->assertSame($order->getReference(), $body['client_reference_id']);
-        $this->assertSame('3490', $body['line_items'][0]['price_data']['unit_amount']);
+        $this->assertSame('5490', $body['line_items'][0]['price_data']['unit_amount']);
         $this->assertSame('eur', $body['line_items'][0]['price_data']['currency']);
     }
 
     public function testWebhookMarksTheOrderAsPaid(): void
     {
         $this->loginAs('client@figurama.test');
-        $this->addToCart('Panda gourmand');
+        $this->addToCart('Mannequin d\'atelier');
         $this->checkout();
         $order = $this->latestOrder();
 

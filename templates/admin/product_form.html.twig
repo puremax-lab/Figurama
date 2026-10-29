@@ -1,30 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ is_new ? 'Nouveau produit' : product.name }}{% endblock %}
+{% block title %}{{ is_new ? 'Nouvelle pièce' : product.name }}{% endblock %}
 
 {% block body %}
-    <a href="{{ path('admin_products') }}" class="small"><i class="bi bi-arrow-left"></i> Produits</a>
-    <h1 class="my-3">{{ is_new ? 'Nouveau produit' : 'Modifier « ' ~ product.name ~ ' »' }}</h1>
+    <a href="{{ path('admin_products') }}" class="small">← Pièces</a>
+    <h1 class="my-3">{{ is_new ? 'Nouvelle pièce' : product.name }}</h1>
 
-    <div class="card border-0 shadow-sm" style="max-width: 760px">
-        <div class="card-body">
-            {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
-                <div class="row">
-                    <div class="col-md-8">{{ form_row(form.name) }}</div>
-                    <div class="col-md-4">{{ form_row(form.category) }}</div>
-                </div>
-                {{ form_row(form.description) }}
-                <div class="row">
-                    <div class="col-6 col-md-3">{{ form_row(form.priceCents) }}</div>
-                    <div class="col-6 col-md-3">{{ form_row(form.stock) }}</div>
-                    <div class="col-6 col-md-3">{{ form_row(form.icon) }}</div>
-                    <div class="col-6 col-md-3">{{ form_row(form.color) }}</div>
-                </div>
-                {{ form_row(form.featured) }}
-                {{ form_row(form.active) }}
-                <button class="btn btn-primary">Enregistrer</button>
-                <a href="{{ path('admin_products') }}" class="btn btn-link">Annuler</a>
-            {{ form_end(form) }}
-        </div>
+    <div class="panel" style="max-width: 820px">
+        {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+            <div class="row">
+                <div class="col-md-8">{{ form_row(form.name) }}</div>
+                <div class="col-md-4">{{ form_row(form.category) }}</div>
+            </div>
+            {{ form_row(form.description) }}
+            {{ form_row(form.imageUrl) }}
+            <div class="row">
+                <div class="col-6 col-md-3">{{ form_row(form.priceCents) }}</div>
+                <div class="col-6 col-md-3">{{ form_row(form.stock) }}</div>
+                <div class="col-6 col-md-3">{{ form_row(form.heightCm) }}</div>
+                <div class="col-6 col-md-3">{{ form_row(form.scale) }}</div>
+            </div>
+            {{ form_row(form.material) }}
+            {{ form_row(form.featured) }}
+            {{ form_row(form.active) }}
+            <button class="btn btn-primary mt-2">Enregistrer</button>
+            <a href="{{ path('admin_products') }}" class="btn btn-link mt-2">Annuler</a>
+        {{ form_end(form) }}
     </div>
 {% endblock %}

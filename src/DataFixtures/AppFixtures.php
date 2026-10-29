@@ -22,46 +22,46 @@ final class AppFixtures extends Fixture
     {
         $categories = [];
         foreach ([
-            'fantasy' => ['Fantasy', '🐉'],
-            'science-fiction' => ['Science-fiction', '🚀'],
-            'heros' => ['Héros', '🦸'],
-            'animaux' => ['Animaux', '🦊'],
-            'retro-gaming' => ['Rétro gaming', '👾'],
-        ] as $slug => [$name, $icon]) {
-            $categories[$slug] = new Category($name, $slug, $icon);
+            'fantasy' => ['Fantasy', 'FAN'],
+            'retro-futur' => ['Rétro-futur', 'RTF'],
+            'curiosites' => ['Curiosités', 'CUR'],
+        ] as $slug => [$name, $code]) {
+            $categories[$slug] = new Category($name, $slug, $code);
             $manager->persist($categories[$slug]);
         }
 
-        // [category, name, icon, background, price in cents, stock, featured, description]
+        // Photos from Unsplash (free licence): https://unsplash.com/license
+        // [category, name, Unsplash photo id, price in cents, stock, featured, height cm, scale, material, description]
         $catalogue = [
-            ['fantasy', 'Dragon des cendres', '🐉', '#fde2d2', 4990, 6, true, 'Dragon aux ailes déployées, sculpté à la main et peint en dégradés de rouge et de gris. Socle en résine imitation roche volcanique. Hauteur 22 cm.'],
-            ['fantasy', 'Mage de la tour d\'argent', '🧙', '#e3e0fb', 3490, 12, false, 'Magicien en longue robe étoilée, bâton levé. Peinture détaillée avec effets de lumière sur le cristal. Hauteur 15 cm.'],
-            ['fantasy', 'Licorne des brumes', '🦄', '#fbe3f1', 2990, 2, false, 'Licorne nacrée sur un nuage de résine translucide. Finition irisée. Hauteur 14 cm. Dernières pièces de la série.'],
-            ['fantasy', 'Chevalier de l\'aube', '⚔️', '#e6ecf3', 3990, 9, false, 'Chevalier en armure complète, épée et bouclier gravé. Métal patiné et cape en tissu véritable. Hauteur 18 cm.'],
-            ['science-fiction', 'Robot explorateur R-7', '🤖', '#dff3f6', 3990, 15, true, 'Robot articulé aux bras et à la tête mobiles, yeux lumineux à LED (piles fournies). Hauteur 20 cm.'],
-            ['science-fiction', 'Fusée Odyssée', '🚀', '#e3e9fb', 2490, 20, false, 'Maquette de fusée rétro-futuriste sur socle lunaire. Peinture métallisée. Hauteur 25 cm.'],
-            ['science-fiction', 'Astronaute en apesanteur', '🧑‍🚀', '#e9e7f5', 2790, 0, false, 'Astronaute suspendu à son câble au-dessus d\'un mini-satellite. Hauteur 16 cm. Bientôt de retour en stock.'],
-            ['science-fiction', 'Visiteur de Zeta', '👽', '#e2f6e4', 1990, 25, false, 'Petit extraterrestre sympathique avec sa soucoupe. Résine phosphorescente qui brille dans le noir. Hauteur 10 cm.'],
-            ['heros', 'Super-héroïne Éclair', '🦸', '#fff0d6', 3490, 7, true, 'Héroïne en plein envol, cape au vent et poing levé. Socle façon toit d\'immeuble. Hauteur 19 cm.'],
-            ['heros', 'Ninja de minuit', '🥷', '#e4e4ea', 2990, 3, false, 'Ninja en position de garde avec ses deux sabres. Tenue noire mate et détails rouges. Hauteur 15 cm.'],
-            ['heros', 'Détective masqué', '🕵️', '#ece6dd', 2690, 11, false, 'Détective en imperméable et chapeau, loupe à la main. Socle pavé de ruelle. Hauteur 16 cm.'],
-            ['animaux', 'Renard des neiges', '🦊', '#fde9dc', 2290, 18, true, 'Renard roux enroulé dans la neige, fourrure peinte poil par poil. Hauteur 9 cm.'],
-            ['animaux', 'Panda gourmand', '🐼', '#eef1ec', 1890, 30, false, 'Panda assis avec sa tige de bambou. Résine douce au toucher. Hauteur 11 cm.'],
-            ['animaux', 'Hibou érudit', '🦉', '#efe6d8', 2190, 1, false, 'Hibou à lunettes perché sur une pile de livres anciens. Hauteur 12 cm. Dernière pièce.'],
-            ['retro-gaming', 'Fantôme pixel', '👾', '#e7e2fb', 1490, 40, false, 'Personnage pixel art en volume, couleurs vives et finition brillante. Hauteur 8 cm.'],
-            ['retro-gaming', 'Manette arcade géante', '🕹️', '#fde3e3', 3290, 8, false, 'Réplique d\'un joystick d\'arcade avec boutons qui s\'enfoncent. Hauteur 14 cm.'],
+            ['fantasy', 'Dragon de rubis', '1761501156501-d6e4fd7cde5f', 4990, 6, true, 24, '1/10', 'Résine peinte à la main', 'Dragon enroulé autour de son orbe de cristal. Les écailles sont peintes une à une en trois tons de rouge, puis vernies. Livré sur son socle laqué.'],
+            ['fantasy', 'Dragonnet de mousse', '1792571394194-3fca5f360104', 2290, 18, true, 9, '1/6', 'Impression 3D, PLA mat', 'Petit dragon assis, imprimé en 3D puis poncé et peint à l\'aérographe. Le ventre et les cornes sont laissés en beige pour garder l\'aspect brut.'],
+            ['fantasy', 'Chevalier du croissant', '1784720528906-76d551456e23', 3990, 9, false, 18, '1/32', 'Métal et résine', 'Chevalier épée levée au pied d\'un croissant de lune sculpté. Le personnage est en métal, le décor en résine teintée dans la masse.'],
+            ['fantasy', 'Nain à la pipe', '1783171766117-225c1f70fa86', 2690, 3, false, 6, '1/28', 'Métal blanc peint', 'Miniature de jeu de plateau peinte avec soin : barbe en dégradé, cuir patiné, fumée de pipe sculptée. Socle de 32 mm.'],
+            ['fantasy', 'Hibou de bronze', '1769839271985-87e087c2bbb5', 3490, 1, false, 11, '1/10', 'Bronze patiné', 'Hibou coulé en bronze puis patiné à la main. Lourd, froid au toucher, parfait comme serre-livres. Dernière pièce de la fonte.'],
+            ['fantasy', 'Patrouille nocturne', '1779286661453-0fff222bccee', 6490, 2, false, 20, '1/72', 'Diorama résine, LED', 'Diorama d\'une rue gothique la nuit, avec ses lanternes allumées par de vraies LED (pile CR2032 fournie). Une scène entière à poser sur une étagère.'],
+            ['retro-futur', 'Duo de robots en tôle', '1759322394509-87db4271279a', 4490, 7, true, 21, '1/6', 'Tôle lithographiée', 'Reproduction de deux robots jouets des années 60, en tôle imprimée comme à l\'époque. Les bras pivotent, les cadrans sont peints à la main.'],
+            ['retro-futur', 'Robot coiffé R-7', '1527430253228-e93688616381', 3290, 12, false, 19, '1/6', 'Tôle lithographiée', 'Robot rétro à la tête crantée et aux yeux ronds. Un modèle de collection qui ne se démonte pas : à exposer, pas à jouer.'],
+            ['retro-futur', 'Robot à remontoir', '1546776230-bb86256870ce', 2990, 0, false, 16, '1/6', 'Tôle et mécanisme à clé', 'Robot qui marche quand on tourne sa clé dans le dos. Mécanisme d\'origine restauré. Rupture de stock, retour prévu le mois prochain.'],
+            ['retro-futur', 'Astronaute lunaire', '1694619100998-3b5ae167399c', 1990, 25, false, 8, '1/24', 'Résine blanche', 'Astronaute qui salue, debout sur un morceau de sol lunaire texturé. Résine blanche mate, sans peinture, pour un rendu de maquette.'],
+            ['retro-futur', 'Astronautes en apesanteur', '1602212096437-d0af1ce0553e', 2490, 14, false, 7, '1/24', 'Résine, fils invisibles', 'Deux astronautes suspendus à des fils transparents, à accrocher au plafond ou dans une vitrine. Effet d\'apesanteur garanti.'],
+            ['retro-futur', 'Scaphandrier ailé', '1765118460712-036937551d15', 5490, 4, true, 30, '1/8', 'Résine et laiton', 'Scaphandrier steampunk perché sur son piédestal, casque en laiton véritable et ailes mécaniques. La pièce la plus travaillée du catalogue.'],
+            ['curiosites', 'Chien de porcelaine', '1773425349996-89b5413b0ae8', 2790, 10, false, 14, '1/4', 'Porcelaine émaillée', 'Chien assis en porcelaine blanche, émaillage brillant et museau peint. Un objet de brocante remis au goût du jour.'],
+            ['curiosites', 'Stégosaure des falaises', '1627874458566-20503b954fde', 1890, 30, false, 12, '1/40', 'PVC peint', 'Stégosaure à l\'échelle, plaques dorsales détaillées. Solide et sans pièce fragile, il convient aussi aux enfants dès 6 ans.'],
+            ['curiosites', 'Mannequin d\'atelier', '1774227738455-99f7a75f8257', 1490, 40, false, 30, '1/6', 'Hêtre massif articulé', 'Mannequin articulé en bois, utilisé par les dessinateurs pour étudier les poses. Il tient debout seul et se plie dans toutes les positions.'],
         ];
 
         $products = [];
-        foreach ($catalogue as [$category, $name, $icon, $color, $price, $stock, $featured, $description]) {
+        foreach ($catalogue as [$category, $name, $photo, $price, $stock, $featured, $height, $scale, $material, $description]) {
             $product = (new Product())
                 ->setCategory($categories[$category])
                 ->setName($name)
-                ->setIcon($icon)
-                ->setColor($color)
+                ->setImageUrl('https://images.unsplash.com/photo-' . $photo . '?w=900&q=80&auto=format&fit=crop')
                 ->setPriceCents($price)
                 ->setStock($stock)
                 ->setFeatured($featured)
+                ->setHeightCm($height)
+                ->setScale($scale)
+                ->setMaterial($material)
                 ->setDescription($description);
             $manager->persist($product);
             $products[] = $product;
@@ -74,9 +74,9 @@ final class AppFixtures extends Fixture
 
         // A few past orders, so the account page and the admin dashboard are not empty.
         foreach ([
-            [[0 => 1, 11 => 2], OrderStatus::Delivered],
-            [[4 => 1], OrderStatus::Shipped],
-            [[8 => 1, 14 => 3], OrderStatus::Paid],
+            [[0 => 1, 13 => 2], OrderStatus::Delivered],
+            [[6 => 1], OrderStatus::Shipped],
+            [[11 => 1, 9 => 3], OrderStatus::Paid],
         ] as [$lines, $status]) {
             $order = (new Order($client))
                 ->setShippingName('Camille Dubois')

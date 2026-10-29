@@ -3,19 +3,19 @@
 {% block title %}Commande {{ order.reference }}{% endblock %}
 
 {% block body %}
-    <a href="{{ path('app_account') }}" class="small"><i class="bi bi-arrow-left"></i> Mes commandes</a>
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 my-3">
-        <h1 class="mb-0">Commande {{ order.reference }}</h1>
+    <a href="{{ path('app_account') }}" class="small">← Mes commandes</a>
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 my-3">
+        <h1 class="mb-0">{{ order.reference }}</h1>
         {{ include('_partials/_status.html.twig', {status: order.status}) }}
     </div>
 
     {% if order.status.value == 'pending' %}
-        <div class="alert alert-warning d-flex flex-wrap align-items-center gap-2">
-            <span class="me-auto">Cette commande n'est pas encore payée. Les articles restent réservés pour vous.</span>
-            <a href="{{ path('app_payment', {reference: order.reference}) }}" class="btn btn-primary btn-sm">Payer maintenant</a>
+        <div class="alert alert-warning d-flex flex-wrap align-items-center gap-3">
+            <span class="me-auto">Commande non payée : les pièces restent réservées pour vous.</span>
+            <a href="{{ path('app_payment', {reference: order.reference}) }}" class="btn btn-sm btn-primary">Payer maintenant</a>
             <form method="post" action="{{ path('app_account_order_cancel', {reference: order.reference}) }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ order.reference) }}">
-                <button class="btn btn-outline-danger btn-sm">Annuler la commande</button>
+                <button class="btn btn-sm btn-dark">Annuler la commande</button>
             </form>
         </div>
     {% endif %}

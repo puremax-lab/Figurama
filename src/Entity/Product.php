@@ -48,14 +48,27 @@ class Product
     #[Assert\LessThanOrEqual(9999)]
     private int $stock = 0;
 
-    #[ORM\Column(length: 16)]
+    /** Photo URL (Unsplash in the demo data). */
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Assert\Length(max: 16)]
-    private ?string $icon = null;
+    #[Assert\Url(requireTld: true)]
+    private ?string $imageUrl = null;
 
-    #[ORM\Column(length: 7)]
-    #[Assert\Regex('/^#[0-9a-fA-F]{6}$/', message: 'Couleur au format #RRGGBB.')]
-    private string $color = '#e8eefc';
+    #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\Range(min: 1, max: 200)]
+    private ?int $heightCm = null;
+
+    /** Scale of the figurine, for example 1/12. */
+    #[ORM\Column(length: 10)]
+    #[Assert\NotBlank]
+    #[Assert\Regex('/^1\/\d{1,3}$/', message: 'Échelle au format 1/12.')]
+    private ?string $scale = null;
+
+    #[ORM\Column(length: 60)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 60)]
+    private ?string $material = null;
 
     #[ORM\Column]
     private bool $featured = false;
@@ -172,26 +185,56 @@ class Product
         $this->stock += $quantity;
     }
 
-    public function getIcon(): ?string
+    /** Technical reference shown on the product sheet, for example FAN-004. */
+    public function getReference(): string
     {
-        return $this->icon;
+        return sprintf('%s-%03d', $this->category?->getCode() ?? 'FIG', (int) $this->id);
     }
 
-    public function setIcon(?string $icon): static
+    public function getImageUrl(): ?string
     {
-        $this->icon = $icon;
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(?string $imageUrl): static
+    {
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
 
-    public function getColor(): string
+    public function getHeightCm(): ?int
     {
-        return $this->color;
+        return $this->heightCm;
     }
 
-    public function setColor(string $color): static
+    public function setHeightCm(?int $heightCm): static
     {
-        $this->color = $color;
+        $this->heightCm = $heightCm;
+
+        return $this;
+    }
+
+    public function getScale(): ?string
+    {
+        return $this->scale;
+    }
+
+    public function setScale(?string $scale): static
+    {
+        $this->scale = $scale;
+
+        return $this;
+    }
+
+    public function getMaterial(): ?string
+    {
+        return $this->material;
+    }
+
+    public function setMaterial(?string $material): static
+    {
+        $this->material = $material;
 
         return $this;
     }

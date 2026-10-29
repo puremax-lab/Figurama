@@ -1,7 +1,7 @@
-# 🐉 Figurama
+# FIGURAMA
 
-**An online shop for collectible figurines, built with Symfony 7.4: catalogue, cart, Stripe payment and back office.**
-*Boutique en ligne de figurines de collection, développée avec Symfony 7.4.*
+Online shop for collectible figurines, built with **Symfony 7.4**: catalogue, cart, stock reservation, **Stripe** payment and a back office.
+*Boutique en ligne de figurines de collection.*
 
 ![Symfony](https://img.shields.io/badge/Symfony-7.4_LTS-000000?logo=symfony)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
@@ -10,68 +10,50 @@
 
 ![Home page](docs/screenshots/home.png)
 
-## In short
+## The idea
 
-| | |
-|---|---|
-| **What it does** | Customers browse the catalogue, fill a cart, pay with Stripe and follow their orders. Admins manage products, stock and shipping |
-| **What it shows** | The core of e-commerce: a session cart, stock reservation, an order life cycle, an online payment with webhooks, and a back office |
-| **Payment** | Real Stripe Checkout in test mode when a key is set, otherwise a built-in demo payment, so the shop works without any account |
-| **Status** | Responsive on phones and desktops, covered by automated tests |
+Figurines are scale models, so the shop is designed like an **engineering drawing**: blue gridded paper, monospaced text, a reference code for every piece (`FAN-001`), dimension lines on the photos and a technical sheet with height, scale and material. On top of that, a touch of **convention fanzine**: prices are tilted stickers, out-of-stock items get a red rubber stamp, buttons have hard shadows.
 
-## Features
+Photos are printed in blueprint blue and turn to full colour on hover. The cart is called a *bon de commande* (order form), the back office *l'atelier* (the workshop).
 
-- **Catalogue**: categories, search, sort by price or date, "in stock only" filter, pagination, product page with similar products
-- **Cart**: add, change quantities, remove; quantities can never exceed the stock
-- **Checkout**: shipping address, then payment with **Stripe Checkout** (test cards) or the demo payment
-- **Customer account**: order history and details, pay later or cancel an unpaid order
-- **Back office**: dashboard (revenue, orders to ship, low stock), product management, order list by status, shipping and cancelling orders
+## What you can do
 
-## Screenshots
+**As a customer**
+- Browse the catalogue by series, search, sort by price, hide out-of-stock pieces
+- Read a technical sheet for each piece and add it to the order form (never more than the stock)
+- Enter a shipping address and pay with **Stripe Checkout** (test cards), or with the built-in demo payment when no Stripe key is set
+- Follow your orders, pay later or cancel an unpaid order
 
-| Product page | Cart |
+**As an admin**
+- See revenue, orders to ship and pieces running low
+- Add and edit pieces (photo, price, stock, height, scale, material)
+- Move orders through their statuses: paid → shipped → delivered, or cancelled
+
+## Under the hood
+
+- **Stock is reserved when the order is placed** ([`OrderWorkflow`](src/Order/OrderWorkflow.php)), in a database transaction (with a row lock on databases that support it), so two customers cannot buy the last piece. Cancelling gives the stock back.
+- **Order statuses as a PHP enum** ([`OrderStatus`](src/Entity/OrderStatus.php)) that knows which changes are allowed: a delivered order cannot be cancelled, a pending one cannot be shipped.
+- **Prices in cents**, copied into each order line: changing a price never changes a past order.
+- **Session cart** ([`Cart`](src/Cart/Cart.php)) that removes pieces no longer sold and lowers quantities when the stock goes down.
+- **Stripe without the SDK** ([`StripeClient`](src/Payment/StripeClient.php)): Checkout sessions created with Symfony HttpClient, payment checked again when the customer comes back, and a webhook whose **signature is verified** (HMAC-SHA256, 5-minute tolerance). Marking an order as paid is idempotent, because Stripe may send the same event twice.
+- **Security**: login throttling, hashed passwords, CSRF tokens on every form that changes data, and a **voter** ([`OrderVoter`](src/Security/OrderVoter.php)) so customers only see their own orders.
+- **Front end**: Bootstrap provides the grid and base components, but the whole look comes from a single hand-written stylesheet ([`app.css`](assets/styles/app.css)) with IBM Plex Mono and Archivo Black.
+
+## Screens
+
+| Product sheet | Order form |
 |---|---|
 | ![Product](docs/screenshots/product.png) | ![Cart](docs/screenshots/cart.png) |
 
-| Payment | Back office |
+| Demo payment | Back office |
 |---|---|
 | ![Payment](docs/screenshots/payment.png) | ![Admin dashboard](docs/screenshots/admin.png) |
 
-| Mobile: catalogue | Mobile: product |
+| Phone: catalogue | Phone: product |
 |---|---|
 | ![Mobile catalogue](docs/screenshots/mobile-shop.png) | ![Mobile product](docs/screenshots/mobile-product.png) |
 
-## Technical highlights
-
-**E-commerce logic**
-- **Stock reserved when the order is placed** ([`OrderWorkflow`](src/Order/OrderWorkflow.php)), inside a database transaction (with a row lock on databases that support it), so two customers cannot buy the last item. Cancelling an order puts the items back in stock.
-- **Order life cycle** as a PHP enum ([`OrderStatus`](src/Entity/OrderStatus.php)): pending → paid → shipped → delivered, or cancelled. Impossible changes (for example delivered → cancelled) are refused.
-- **Prices stored in cents** to avoid rounding errors, and **copied into each order line**, so a later price change does not alter past orders.
-- **Session cart** ([`Cart`](src/Cart/Cart.php)) that drops products no longer sold and lowers quantities when the stock goes down.
-
-**Stripe integration** ([`StripeClient`](src/Payment/StripeClient.php)), written with Symfony HttpClient, without the Stripe SDK
-- Creates a **Checkout session** with the order lines, then confirms the payment with the Stripe API when the customer comes back.
-- **Webhook** `checkout.session.completed`, with **signature verification** (HMAC-SHA256 and timestamp check). Marking an order as paid is idempotent, since Stripe can send the same event twice.
-
-**Security**
-- Form login with **login throttling**, hashed passwords, CSRF tokens on every form that changes data (cart, payment, status changes, logout).
-- **Voter** ([`OrderVoter`](src/Security/OrderVoter.php)): a customer only sees their own orders; the back office is limited to `ROLE_ADMIN`.
-
-**Quality**
-- **PHPUnit functional tests** that run the whole purchase: cart, stock limits, checkout, demo payment, cancelling, permissions, back office, and the Stripe client and webhook (with `MockHttpClient` and signed payloads, never the real API).
-- **GitHub Actions** runs the tests at every push.
-
-## Tech stack
-
-| | |
-|---|---|
-| Back end | PHP 8.2+, Symfony 7.4 LTS, Doctrine ORM 3, Twig |
-| Database | SQLite |
-| Front end | Bootstrap 5, AssetMapper |
-| Payment | Stripe Checkout (test mode), called with Symfony HttpClient |
-| Tests | PHPUnit 12 |
-
-## Database
+## Data model
 
 ```mermaid
 erDiagram
@@ -84,6 +66,7 @@ erDiagram
         int id PK
         varchar name
         varchar slug UK
+        char code "FAN, RTF, CUR"
     }
     PRODUCT {
         int id PK
@@ -92,7 +75,9 @@ erDiagram
         varchar slug UK
         int price_cents
         int stock
-        boolean active
+        int height_cm
+        varchar scale
+        varchar image_url
     }
     USERS {
         int id PK
@@ -106,7 +91,6 @@ erDiagram
         int customer_id FK
         varchar status
         int total_cents
-        varchar shipping_address
         varchar stripe_session_id "nullable"
     }
     ORDER_ITEM {
@@ -119,12 +103,11 @@ erDiagram
     }
 ```
 
-- An order has at least one line. Each line keeps the product name and price at the time of the order.
-- If a product is deleted, its order lines stay (`product_id` becomes empty).
+An order line keeps the name and price of the piece at the time of the order. If a piece is deleted, the line stays and `product_id` becomes empty.
 
-## Run it locally
+## Try it
 
-**Requirements:** PHP 8.2+ with `intl` and `pdo_sqlite`, and [Composer](https://getcomposer.org).
+**Requirements:** PHP 8.2+ with `intl` and `pdo_sqlite`, and [Composer](https://getcomposer.org). The database is a SQLite file, nothing to install.
 
 ```bash
 git clone https://github.com/puremax-lab/Figurama.git
@@ -135,23 +118,27 @@ php bin/console doctrine:fixtures:load -n
 php -S 127.0.0.1:8000 -t public public/index.php
 ```
 
-Open http://127.0.0.1:8000. Demo accounts (password `password`): `client@figurama.test` (customer) and `admin@figurama.test` (back office).
+Open http://127.0.0.1:8000 and log in with `client@figurama.test` (customer) or `admin@figurama.test` (workshop), password `password`.
 
-**With Stripe (optional):** create a free Stripe account, then add your test keys to `.env.local`:
+To use the real Stripe page, put your **test** keys in `.env.local`:
 
 ```dotenv
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
-Pay with the test card `4242 4242 4242 4242`, any future date and any CVC. For the webhook in local, use the [Stripe CLI](https://docs.stripe.com/stripe-cli): `stripe listen --forward-to 127.0.0.1:8000/stripe/webhook`.
+Then pay with the card `4242 4242 4242 4242`, any future date and any CVC. In local, forward the webhook with the [Stripe CLI](https://docs.stripe.com/stripe-cli): `stripe listen --forward-to 127.0.0.1:8000/stripe/webhook`.
 
-**Run the tests:**
+## Tests
 
 ```bash
 php bin/phpunit
 ```
 
-## Author
+34 functional and unit tests go through the whole purchase: cart and stock limits, checkout, demo payment, cancelling, permissions, back office, and the Stripe client and webhook (with `MockHttpClient` and signed payloads, never the real API). GitHub Actions runs them at every push.
+
+## Credits
+
+Product photos come from [Unsplash](https://unsplash.com) and are used under the [Unsplash licence](https://unsplash.com/license). The photo of each piece is listed in [`AppFixtures`](src/DataFixtures/AppFixtures.php).
 
 **puremax-lab**: [github.com/puremax-lab](https://github.com/puremax-lab)

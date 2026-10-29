@@ -1,19 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Merci pour votre commande{% endblock %}
+{% block title %}Commande confirmée{% endblock %}
 
 {% block body %}
     <div class="text-center py-4">
         {% if order.status.value == 'pending' %}
-            <p class="fs-1 mb-2" aria-hidden="true">⏳</p>
+            <p class="eyebrow">En attente</p>
             <h1>Paiement en cours de validation</h1>
-            <p class="text-body-secondary">Nous attendons la confirmation de Stripe. Votre commande {{ order.reference }} sera mise à jour dans quelques instants.</p>
+            <p class="text-muted-blue mt-3">Stripe n'a pas encore confirmé le paiement de la commande {{ order.reference }}. Cette page sera à jour dans quelques instants.</p>
         {% else %}
-            <p class="fs-1 mb-2" aria-hidden="true">🎉</p>
-            <h1>Merci pour votre commande !</h1>
-            <p class="text-body-secondary">Commande <strong>{{ order.reference }}</strong> payée : {{ order.totalCents|price }}.<br>Elle sera expédiée à {{ order.shippingCity }} sous 48 heures.</p>
+            <p class="mb-4"><span class="sticker sticker-big">Payé</span></p>
+            <h1>Merci pour votre commande</h1>
+            <p class="text-muted-blue mt-3">Commande <strong class="text-white">{{ order.reference }}</strong> · {{ order.totalCents|price }}<br>Préparation à l'atelier, expédition vers {{ order.shippingCity }} sous 48 h.</p>
         {% endif %}
-        <a href="{{ path('app_account_order', {reference: order.reference}) }}" class="btn btn-primary">Voir ma commande</a>
-        <a href="{{ path('app_shop') }}" class="btn btn-outline-dark">Continuer mes achats</a>
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <a href="{{ path('app_account_order', {reference: order.reference}) }}" class="btn btn-primary">Voir la commande</a>
+            <a href="{{ path('app_shop') }}" class="btn btn-outline-light">Retour au catalogue</a>
+        </div>
     </div>
 {% endblock %}
