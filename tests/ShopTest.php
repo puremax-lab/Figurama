@@ -35,7 +35,8 @@ final class ShopTest extends AppWebTestCase
         $crawler = $this->client->request('GET', '/boutique?categorie=fantasy&tri=prix-croissant');
 
         $this->assertSame(
-            ['Dragonnet de mousse', 'Nain à la pipe', 'Hibou de bronze', 'Chevalier du croissant', 'Dragon de rubis', 'Patrouille nocturne'],
+            ['Fée aux fleurs', 'Dragonnet de mousse', 'Fée des sous-bois', 'Nain à la pipe', 'Licorne de porcelaine', 'Hibou de bronze',
+             'Sirène de bronze', 'Chevalier du croissant', 'Griffon de pierre', 'Dragon de rubis', 'Mage de bois sculpté', 'Patrouille nocturne'],
             $this->names($crawler),
         );
     }
@@ -45,7 +46,7 @@ final class ShopTest extends AppWebTestCase
         $names = $this->names($this->client->request('GET', '/boutique?q=ROBOT'));
         sort($names);
 
-        $this->assertSame(['Duo de robots en tôle', 'Robot coiffé R-7', 'Robot à remontoir'], $names);
+        $this->assertSame(['Duo de robots en tôle', 'Escouade de robots', 'Robot coiffé R-7', 'Robot rouge à cadran', 'Robot à antenne rouge', 'Robot à remontoir'], $names);
     }
 
     public function testCanHideOutOfStockProducts(): void
@@ -65,11 +66,16 @@ final class ShopTest extends AppWebTestCase
         $this->assertStringContainsString('page=2', $next);
         $this->assertStringContainsString('tri=prix-croissant', $next, 'the filters are kept');
 
-        // What assets/app.js asks for: only the next cards, and no link since it is the last page.
+        // What assets/app.js asks for: only the next cards, and a link to the page after.
         $more = $this->client->request('GET', $next, server: ['HTTP_X_REQUESTED_WITH' => 'fetch']);
-        $this->assertCount(3, $more->filter('[data-items] .plate'));
-        $this->assertCount(0, $more->filter('[data-load-more]'));
+        $this->assertCount(12, $more->filter('[data-items] .plate'));
+        $this->assertStringContainsString('page=3', $more->filter('[data-load-more]')->attr('href'));
         $this->assertCount(0, $more->filter('nav'), 'no layout around the cards');
+
+        // 40 pieces, 12 per page: page 4 is the last one, with no further link.
+        $last = $this->client->request('GET', str_replace('page=2', 'page=4', $next), server: ['HTTP_X_REQUESTED_WITH' => 'fetch']);
+        $this->assertCount(4, $last->filter('[data-items] .plate'));
+        $this->assertCount(0, $last->filter('[data-load-more]'));
     }
 
     public function testProductPageShowsTheTechnicalSheet(): void

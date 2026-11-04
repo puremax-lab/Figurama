@@ -71,7 +71,7 @@ final class CartTest extends AppWebTestCase
         $this->client->submit($crawler->filter('form[role="search"]')->form(['q' => 'astronaute']));
 
         $this->assertRouteSame('app_shop');
-        $this->assertCount(2, $this->client->getCrawler()->filter('#catalogue .plate'));
+        $this->assertCount(3, $this->client->getCrawler()->filter('#catalogue .plate'));
     }
 
     public function testRefusesCartChangesWithoutCsrfToken(): void

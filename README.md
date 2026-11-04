@@ -146,4 +146,34 @@ For the real Stripe page, add your test keys (`STRIPE_SECRET_KEY`, `STRIPE_WEBHO
 
 Product photos from [Unsplash](https://unsplash.com) ([licence](https://unsplash.com/license)).
 
+Photographers of the pieces added later:
+
+| Piece | Photographer |
+|---|---|
+| Licorne de porcelaine | [Annie Spratt](https://unsplash.com/photos/white-and-gold-ceramic-unicorn-figurine-near-coins-Jr8byYZmTTU) |
+| Mage de bois sculpté | [David Trinks](https://unsplash.com/photos/a-statue-of-a-man-with-a-hat-and-a-cane-_eZY2eqNWkQ) |
+| Fée des sous-bois | [Mamun Srizon](https://unsplash.com/photos/a-blue-flower-on-a-branch-OpUDw9RR0ys) |
+| Griffon de pierre | [Deborah L Carlson](https://unsplash.com/photos/a-statue-of-a-lion-with-wings-on-top-of-a-building-1fDkObhccJc) |
+| Sirène de bronze | [Alexandr Popadin](https://unsplash.com/photos/a-bronze-mermaid-figurine-sits-among-some-coins-zfHiLYHM4Tk) |
+| Citadelle des neiges | [Jan-Niclas Aberle](https://unsplash.com/photos/gray-concrete-building-on-snow-covered-ground-during-daytime-NbvRZZszxZ0) |
+| Fée aux fleurs | [Trac Vu](https://unsplash.com/photos/angel-holding-flowers-ceramic-figurine-zGYvSU4Uv_0) |
+| Manège-fusée en tôle | [Townsend Walton](https://unsplash.com/photos/a-brightly-colored-carnival-ride-on-a-wooden-table-wpMCSvEH43c) |
+| Soucoupe volante S-1 | [Alex de Koning](https://unsplash.com/photos/white-and-red-robot-toy-with-a-camera-lens-7CSP6T2_PBg) |
+| Robot à antenne rouge | [Sombrero Craft](https://unsplash.com/photos/a-red-robot-figurine-with-a-microphone-on-its-head-EsuXm26FpU4) |
+| Robot rouge à cadran | [Townsend Walton](https://unsplash.com/photos/a-red-toy-robot-standing-on-top-of-a-wooden-floor-Yu6BO9Mc7oQ) |
+| Automobile 1910 en tôle | [Menor Degu](https://unsplash.com/photos/a-vintage-red-car-model-on-a-shelf-mNibfK5s4D0) |
+| Astronaute au croissant de lune | [Kobby Mendez](https://unsplash.com/photos/astronaut-figurine-on-gold-moon-d0oYF8hm4GI) |
+| Escouade de robots | [Eric Krull](https://unsplash.com/photos/blue-and-purple-robot-toy-Ejcuhcdfwrs) |
+| Chat en mosaïque | [Tatiana Reusche](https://unsplash.com/photos/mosaic-cat-statue-walks-on-a-window-sill-xx2tYl1jwEA) |
+| Cavalier de bronze | [The Metropolitan Museum of Art](https://unsplash.com/photos/a-bronze-statuette-of-a-knight-riding-a-horse-gYdFaICZq20) |
+| Éléphant de bois verni | [asif sharif](https://unsplash.com/photos/a-wooden-elephant-figurine-sitting-on-top-of-a-wooden-table-TgMoDrvKZls) |
+| Éléphant d'apparat | [Hofykz](https://unsplash.com/photos/ornate-wooden-elephant-figurine-on-a-wooden-surface-RqL4N_tZCho) |
+| Grenouille couronnée | [Tim Schwaneberg](https://unsplash.com/photos/a-green-frog-statue-wearing-a-silver-crown-BPrND2YNiNY) |
+| Oiseau de verre soufflé | [Leo Liu](https://unsplash.com/photos/glass-figurines-of-birds-and-vases-EA9s3n4qsm0) |
+| Petits soldats d'antan | [Sahand Babali](https://unsplash.com/photos/a-toy-soldier-holding-a-gun-next-to-a-toy-soldier-Vbn9DriDqoA) |
+| Maison de poupée victorienne | [Zoshua Colah](https://unsplash.com/photos/a-model-of-a-house-sitting-on-top-of-a-table-jVDIRYgUuQs) |
+| Baleine de bois flotté | [Maryline Waldy](https://unsplash.com/photos/photo-of-black-whale-toy-bQez9LwXelo) |
+| Tortue de laiton | [Roya Hsu](https://unsplash.com/photos/a-small-golden-turtle-figurine-on-a-grey-surface-E1UBfqYh8Tk) |
+| Poupées gigognes | [Sandy Millar](https://unsplash.com/photos/a-group-of-three-nesting-dolls-sitting-on-top-of-a-wooden-table-5PCeHBkMCmk) |
+
 **puremax-lab**: [github.com/puremax-lab](https://github.com/puremax-lab)
