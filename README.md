@@ -41,6 +41,7 @@ Figurines are scale models, so the shop looks like an engineering drawing (blue 
 - **Verified reviews**: only customers whose order was delivered can review a piece, once.
 - **Quick add and infinite scroll** in plain JavaScript ([`app.js`](assets/app.js)): the server returns JSON or HTML fragments, and everything still works without JavaScript.
 - **Security**: CSRF tokens, login throttling, hashed passwords, and a voter so customers only see their own orders.
+- **Link preview**: Open Graph tags and a preview image, so a shared link shows a card on LinkedIn or in a chat.
 
 ## Stack and quality
 
