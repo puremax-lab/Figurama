@@ -20,7 +20,7 @@ abstract class AppWebTestCase extends WebTestCase
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
+        $this->client = static::createClient([], ['HTTP_ACCEPT_LANGUAGE' => 'fr-BE']);
         $container = static::getContainer();
         $this->em = $container->get(EntityManagerInterface::class);
 

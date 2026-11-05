@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Finder\Finder;
 
 class LanguageTest extends AppWebTestCase
@@ -19,6 +20,36 @@ class LanguageTest extends AppWebTestCase
         $this->assertSame('fr', $crawler->filter('html')->attr('lang'));
         $this->assertSelectorTextContains('main', 'Sélection du moment');
         $this->assertSame(['/langue/fr', '/langue/en'], $crawler->filter('.lang-switch a')->each(fn ($link) => $link->attr('href')));
+    }
+
+    #[DataProvider('browserLanguages')]
+    public function testAFirstVisitFollowsTheBrowser(string $acceptLanguage, string $locale): void
+    {
+        $crawler = $this->client->request('GET', '/', [], [], ['HTTP_ACCEPT_LANGUAGE' => $acceptLanguage]);
+
+        $this->assertSame($locale, $crawler->filter('html')->attr('lang'));
+    }
+
+    public static function browserLanguages(): array
+    {
+        return [
+            'English' => ['en-GB,en;q=0.9', 'en'],
+            'plain English' => ['en', 'en'],
+            'French' => ['fr-BE,fr;q=0.9,en;q=0.8', 'fr'],
+            'German' => ['de-DE,de;q=0.9,en;q=0.8', 'fr'],
+            'Spanish' => ['es', 'fr'],
+        ];
+    }
+
+    public function testTheChosenLanguageBeatsTheBrowser(): void
+    {
+        $this->client->setServerParameter('HTTP_ACCEPT_LANGUAGE', 'en-GB');
+        $this->client->request('GET', '/');
+        $this->client->request('GET', '/langue/fr');
+
+        $crawler = $this->client->request('GET', '/');
+
+        $this->assertSame('fr', $crawler->filter('html')->attr('lang'));
     }
 
     public function testSwitchingReturnsToThePageAndIsRemembered(): void
