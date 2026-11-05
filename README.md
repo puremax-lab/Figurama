@@ -5,7 +5,7 @@ Online shop for collectible figurines built with **Symfony 7.4**: catalogue, car
 
 ### 👉 [Try the live demo](https://puremax-lab.alwaysdata.net/figurama)
 
-Log in with `client@figurama.test` (customer) or `admin@figurama.test` (back office), password `password`. Payment runs in demo mode, no card needed. The shop opens in the language of your browser, French if it is neither French nor English: switch with **FR** / **EN** at the top right.
+Log in with `client@figurama.test` (customer) or `admin@figurama.test` (back office), password `password`. Payment runs in demo mode, no card needed. The shop opens in the language of your browser, English if it is neither French nor English: switch with **FR** / **EN** at the top right.
 
 ![Symfony](https://img.shields.io/badge/Symfony-7.4_LTS-000000?logo=symfony)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
@@ -128,7 +128,7 @@ erDiagram
 
 ## Two languages
 
-A FR / EN switch in the top bar works on every page, on a phone too, and the choice stays in the session. A first visit follows the language of the browser, with French for any language other than French or English.
+A FR / EN switch in the top bar works on every page, on a phone too, and the choice stays in the session. A first visit follows the language of the browser, with English for any language other than French or English.
 
 - **French is the source language**: the text in the templates is the translation key, and [`translations/`](translations) holds the English version, with one file for the interface, one for validation messages and one for the demo catalogue.
 - **The 40 demo products are translated too**: names, descriptions, materials, series and reviews, in [`catalogue.en.php`](translations/catalogue.en.php). The database stays in French, so no migration was needed, and the English search looks in these texts.

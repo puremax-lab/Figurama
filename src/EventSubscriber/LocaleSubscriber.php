@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Applies the language chosen by the visitor, kept in the session. Before any choice it
- * follows the browser: English stays English, any other language gives French, the default.
+ * follows the browser: French stays French, and any other language gives English.
  */
 final class LocaleSubscriber implements EventSubscriberInterface
 {
@@ -31,7 +31,7 @@ final class LocaleSubscriber implements EventSubscriberInterface
 
         if (\in_array($locale, $this->enabledLocales, true)) {
             $request->setLocale($locale);
-        } elseif (preg_match('/^\s*en\b/i', (string) $request->headers->get('Accept-Language'))) {
+        } elseif (preg_match('/^\s*(?!fr\b)[a-z]/i', (string) $request->headers->get('Accept-Language'))) {
             $request->setLocale('en');
         }
     }
