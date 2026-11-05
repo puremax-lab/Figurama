@@ -21,6 +21,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
+use function Symfony\Component\Translation\t;
+
 #[Route('/commande')]
 final class CheckoutController extends AbstractController
 {
@@ -37,7 +39,7 @@ final class CheckoutController extends AbstractController
     {
         $lines = $cart->lines();
         if ($lines === []) {
-            $this->addFlash('warning', 'Votre panier est vide.');
+            $this->addFlash('warning', t('Votre panier est vide.'));
 
             return $this->redirectToRoute('app_shop');
         }
@@ -50,7 +52,7 @@ final class CheckoutController extends AbstractController
             try {
                 $this->workflow->place($order);
             } catch (CheckoutException $e) {
-                $this->addFlash('danger', $e->getMessage());
+                $this->addFlash('danger', t($e->getMessage(), $e->parameters));
 
                 return $this->redirectToRoute('app_cart');
             }
@@ -87,7 +89,7 @@ final class CheckoutController extends AbstractController
                 return $this->redirect($session['url']);
             } catch (\Throwable $e) {
                 $logger->error('Stripe checkout failed: {message}', ['message' => $e->getMessage()]);
-                $this->addFlash('danger', 'Le paiement est momentanément indisponible. Réessayez dans un instant.');
+                $this->addFlash('danger', t('Le paiement est momentanément indisponible. Réessayez dans un instant.'));
 
                 return $this->redirectToRoute('app_account_order', ['reference' => $order->getReference()]);
             }

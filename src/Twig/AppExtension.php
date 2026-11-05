@@ -6,19 +6,19 @@ use App\Cart\Cart;
 use App\Entity\Product;
 use App\Payment\StripeClient;
 use App\Review\Ratings;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 
 final class AppExtension
 {
-    private \NumberFormatter $formatter;
 
     public function __construct(
         private readonly Cart $cart,
         private readonly StripeClient $stripe,
         private readonly Ratings $ratings,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->formatter = new \NumberFormatter('fr_BE', \NumberFormatter::CURRENCY);
     }
 
     /** @return array{average: float, count: int}|null */
@@ -37,11 +37,20 @@ final class AppExtension
         return str_repeat('★', $full) . str_repeat('☆', 5 - $full);
     }
 
-    /** 2490 → "24,90 €" */
+    /** 2490 → "24,90 €" in French, "€24.90" in English */
     #[AsTwigFilter('price')]
     public function price(int $cents): string
     {
-        return $this->formatter->formatCurrency($cents / 100, 'EUR');
+        $locale = $this->translator->getLocale() === 'en' ? 'en_IE' : 'fr_BE';
+
+        return (new \NumberFormatter($locale, \NumberFormatter::CURRENCY))->formatCurrency($cents / 100, 'EUR');
+    }
+
+    /** 4.5 → "4,5" in French, "4.5" in English */
+    #[AsTwigFilter('decimal')]
+    public function decimal(float $number): string
+    {
+        return number_format($number, 1, $this->translator->getLocale() === 'en' ? '.' : ',', '');
     }
 
     #[AsTwigFunction('cart_count')]
@@ -59,6 +68,6 @@ final class AppExtension
     #[AsTwigFunction('country_name')]
     public function countryName(string $code): string
     {
-        return ['BE' => 'Belgique', 'FR' => 'France', 'LU' => 'Luxembourg', 'NL' => 'Pays-Bas'][$code] ?? $code;
+        return $this->translator->trans(['BE' => 'Belgique', 'FR' => 'France', 'LU' => 'Luxembourg', 'NL' => 'Pays-Bas'][$code] ?? $code);
     }
 }

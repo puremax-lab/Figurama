@@ -3,39 +3,39 @@
 {% block body %}
     <section class="hero row g-4 g-lg-5 align-items-end mb-4">
         <div class="col-lg-7">
-            <p class="eyebrow mb-3">Planche 01 · Catalogue général</p>
-            <h1>Figurines<br>à&nbsp;l'échelle.</h1>
-            <p class="lead mt-4">Dragons, robots en tôle, astronautes et curiosités. Chaque pièce est référencée, mesurée et peinte à la main avant de partir de l'atelier.</p>
-            <a href="{{ path('app_shop') }}" class="btn btn-primary btn-lg mt-2">Ouvrir le catalogue</a>
+            <p class="eyebrow mb-3">{{ 'Planche 01 · Catalogue général'|trans }}</p>
+            <h1>{{ 'Figurines'|trans }}<br>{{ "à l'échelle."|trans }}</h1>
+            <p class="lead mt-4">{{ "Dragons, robots en tôle, astronautes et curiosités. Chaque pièce est référencée, mesurée et peinte à la main avant de partir de l'atelier."|trans }}</p>
+            <a href="{{ path('app_shop') }}" class="btn btn-primary btn-lg mt-2">{{ 'Ouvrir le catalogue'|trans }}</a>
         </div>
         <div class="col-lg-5">
             <div class="position-relative">
-                <span class="sticker sticker-red hero-sticker">Livraison offerte</span>
+                <span class="sticker sticker-red hero-sticker">{{ 'Livraison offerte'|trans }}</span>
                 <div class="cartouche">
-                    <div class="cartouche-head"><span>Figurama</span><span>Réf. CAT-2026</span></div>
+                    <div class="cartouche-head"><span>Figurama</span><span>{{ 'Réf. CAT-2026'|trans }}</span></div>
                     <dl>
-                        <dt>Pièces</dt><dd>{{ categories|reduce((sum, item) => sum + item.products, 0) }} modèles au catalogue</dd>
-                        <dt>Échelles</dt><dd>du 1/300 au 1/1</dd>
-                        <dt>Finition</dt><dd>peinture à la main, vernis mat</dd>
-                        <dt>Expédition</dt><dd>sous 48 h · BE · FR · LU · NL</dd>
-                        <dt>Paiement</dt><dd>Stripe, carte bancaire</dd>
+                        <dt>{{ 'Pièces'|trans }}</dt><dd>{{ '%count% modèles au catalogue'|trans({'%count%': categories|reduce((sum, item) => sum + item.products, 0)}) }}</dd>
+                        <dt>{{ 'Échelles'|trans }}</dt><dd>{{ 'du 1/300 au 1/1'|trans }}</dd>
+                        <dt>{{ 'Finition'|trans }}</dt><dd>{{ 'peinture à la main, vernis mat'|trans }}</dd>
+                        <dt>{{ 'Expédition'|trans }}</dt><dd>{{ 'sous 48 h · BE · FR · LU · NL'|trans }}</dd>
+                        <dt>{{ 'Paiement'|trans }}</dt><dd>{{ 'Stripe, carte bancaire'|trans }}</dd>
                     </dl>
                 </div>
             </div>
         </div>
     </section>
 
-    <h2 class="section-title">Index des séries</h2>
+    <h2 class="section-title">{{ 'Index des séries'|trans }}</h2>
     <div>
         {% for item in categories %}
             <a href="{{ path('app_shop', {categorie: item.category.slug}) }}" class="index-link">
-                <span><span class="code">{{ item.category.code }}</span><strong>{{ item.category.name }}</strong></span>
-                <span class="text-muted-blue">{{ item.products }} pièces →</span>
+                <span><span class="code">{{ item.category.code }}</span><strong>{{ item.category.name|trans({}, 'catalogue') }}</strong></span>
+                <span class="text-muted-blue">{{ '%count% pièces →'|trans({'%count%': item.products}) }}</span>
             </a>
         {% endfor %}
     </div>
 
-    <h2 class="section-title">Sélection du moment</h2>
+    <h2 class="section-title">{{ 'Sélection du moment'|trans }}</h2>
     <div class="row row-cols-2 row-cols-lg-4 g-4">
         {% for product in featured %}
             <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>

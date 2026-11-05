@@ -15,7 +15,7 @@ const observer = new IntersectionObserver((entries) => {
 
 async function loadMore(link) {
     observer.unobserve(link);
-    link.textContent = 'Chargement…';
+    link.textContent = link.dataset.loading;
 
     try {
         const response = await fetch(link.href, { headers: { 'X-Requested-With': 'fetch' } });
@@ -34,7 +34,7 @@ async function loadMore(link) {
         }
     } catch {
         // Leave a working link: a click opens the next page normally.
-        link.textContent = 'Charger la suite';
+        link.textContent = link.dataset.label;
     }
 }
 

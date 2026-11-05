@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use function Symfony\Component\Translation\t;
+
 #[Route('/admin')]
 #[IsGranted('ROLE_ADMIN')]
 final class AdminController extends AbstractController
@@ -52,7 +54,7 @@ final class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($product);
             $em->flush();
-            $this->addFlash('success', $isNew ? 'Produit créé.' : 'Produit enregistré.');
+            $this->addFlash('success', t($isNew ? 'Produit créé.' : 'Produit enregistré.'));
 
             return $this->redirectToRoute('admin_products');
         }
@@ -85,14 +87,17 @@ final class AdminController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         $next = OrderStatus::tryFrom($request->request->getString('status'));
+        if ($next === null) {
+            $this->addFlash('danger', t('Statut inconnu.'));
+
+            return $this->redirectToRoute('admin_order', ['reference' => $order->getReference()]);
+        }
+        $current = $order->getStatus();
         try {
-            if ($next === null) {
-                throw new \DomainException('Statut inconnu.');
-            }
             $workflow->changeStatus($order, $next);
-            $this->addFlash('success', sprintf('Commande %s : %s.', $order->getReference(), mb_strtolower($next->label())));
-        } catch (\DomainException $e) {
-            $this->addFlash('danger', $e->getMessage());
+            $this->addFlash('success', t('Commande %reference% : %status%.', ['%reference%' => $order->getReference(), '%status%' => t($next->label())]));
+        } catch (\DomainException) {
+            $this->addFlash('danger', t('Une commande « %from% » ne peut pas passer à « %to% ».', ['%from%' => t($current->label()), '%to%' => t($next->label())]));
         }
 
         return $this->redirectToRoute('admin_order', ['reference' => $order->getReference()]);

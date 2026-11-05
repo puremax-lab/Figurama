@@ -11,12 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/panier')]
 final class CartController extends AbstractController
 {
-    public function __construct(private readonly Cart $cart)
-    {
+    public function __construct(
+        private readonly Cart $cart,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     #[Route('', name: 'app_cart')]
@@ -46,9 +49,10 @@ final class CartController extends AbstractController
         $before = $this->cart->count();
         $this->cart->add($product, $wanted);
         $added = $this->cart->count() > $before;
-        $message = $added
-            ? sprintf('« %s » a été ajouté au bon de commande.', $product->getName())
-            : sprintf('« %s » n\'est plus disponible en plus grande quantité.', $product->getName());
+        $message = $this->translator->trans(
+            $added ? '« %name% » a été ajouté au bon de commande.' : "« %name% » n'est plus disponible en plus grande quantité.",
+            ['%name%' => $this->translator->trans($product->getName(), [], 'catalogue')],
+        );
 
         // Quick add from assets/app.js: answer in JSON, the page stays where it is.
         if ($request->headers->get('X-Requested-With') === 'fetch') {
@@ -67,7 +71,10 @@ final class CartController extends AbstractController
         $wanted = $request->request->getInt('quantity');
         $kept = $this->cart->set($product, $wanted);
         if ($wanted > 0 && $kept < $wanted) {
-            $this->addFlash('warning', sprintf('Quantité limitée à %d pour « %s ».', $kept, $product->getName()));
+            $this->addFlash('warning', $this->translator->trans('Quantité limitée à %count% pour « %name% ».', [
+                '%count%' => $kept,
+                '%name%' => $this->translator->trans($product->getName(), [], 'catalogue'),
+            ]));
         }
 
         return $this->redirectToRoute('app_cart');

@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}{{ 'Inscription'|trans }}{% endblock %}
 
 {% block body %}
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <p class="eyebrow mb-2">Nouveau client</p>
-            <h1 class="mb-4">Inscription</h1>
+            <p class="eyebrow mb-2">{{ 'Nouveau client'|trans }}</p>
+            <h1 class="mb-4">{{ 'Inscription'|trans }}</h1>
             <div class="panel">
                 {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
                     <div class="row">
@@ -15,10 +15,10 @@
                     </div>
                     {{ form_row(form.email) }}
                     {{ form_row(form.plainPassword) }}
-                    <button class="btn btn-primary w-100 mt-2">Créer mon compte</button>
+                    <button class="btn btn-primary w-100 mt-2">{{ 'Créer mon compte'|trans }}</button>
                 {{ form_end(form) }}
             </div>
-            <p class="mt-3">Déjà inscrit ? <a href="{{ path('app_login') }}">Connexion</a></p>
+            <p class="mt-3">{{ 'Déjà inscrit ?'|trans }} <a href="{{ path('app_login') }}">{{ 'Connexion'|trans }}</a></p>
         </div>
     </div>
 {% endblock %}

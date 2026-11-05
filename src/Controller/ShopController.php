@@ -12,9 +12,13 @@ use App\Repository\ReviewRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Translation\TranslatorBagInterface;
+
+use function Symfony\Component\Translation\t;
 
 final class ShopController extends AbstractController
 {
@@ -30,7 +34,7 @@ final class ShopController extends AbstractController
     }
 
     #[Route('/boutique', name: 'app_shop')]
-    public function index(Request $request, ProductRepository $products, CategoryRepository $categories): Response
+    public function index(Request $request, ProductRepository $products, CategoryRepository $categories, #[Autowire(service: 'translator')] TranslatorBagInterface $translations): Response
     {
         $category = $categories->findOneBy(['slug' => $request->query->getString('categorie')]);
         $query = mb_substr(trim($request->query->getString('q')), 0, 60);
@@ -38,7 +42,7 @@ final class ShopController extends AbstractController
         $inStock = $request->query->getBoolean('dispo');
         $page = max(1, $request->query->getInt('page', 1));
 
-        $results = $products->search($category, $query, $sort, $inStock, $page, self::PER_PAGE);
+        $results = $products->search($category, $query, $sort, $inStock, $page, self::PER_PAGE, $this->frenchTextsMatching($query, $request, $translations));
         $pages = max(1, (int) ceil(count($results) / self::PER_PAGE));
         $nextUrl = $page < $pages
             ? $this->generateUrl('app_shop', ['page' => $page + 1] + $request->query->all())
@@ -63,6 +67,23 @@ final class ShopController extends AbstractController
         ]);
     }
 
+    /**
+     * The catalogue is stored in French: in English, a search also looks in its translations.
+     * @return list<string> the French texts whose English version contains the query
+     */
+    private function frenchTextsMatching(string $query, Request $request, TranslatorBagInterface $translations): array
+    {
+        if ($query === '' || $request->getLocale() !== 'en') {
+            return [];
+        }
+        $texts = array_filter(
+            $translations->getCatalogue('en')->all('catalogue'),
+            static fn (string $english) => mb_stripos($english, $query) !== false,
+        );
+
+        return array_map('strval', array_keys($texts));
+    }
+
     /** Product page. Customers who bought the piece can also post their review here. */
     #[Route('/produit/{slug}', name: 'app_product', methods: ['GET', 'POST'])]
     public function show(
@@ -85,7 +106,7 @@ final class ShopController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $em->persist($review);
                 $em->flush();
-                $this->addFlash('success', 'Merci, votre avis est publié.');
+                $this->addFlash('success', t('Merci, votre avis est publié.'));
 
                 return $this->redirect($this->generateUrl('app_product', ['slug' => $product->getSlug()]) . '#avis');
             }
@@ -102,8 +123,8 @@ final class ShopController extends AbstractController
     }
 
     #[Route('/mentions-legales', name: 'app_legal', methods: ['GET'])]
-    public function legal(): Response
+    public function legal(Request $request): Response
     {
-        return $this->render('shop/legal.html.twig');
+        return $this->render($request->getLocale() === 'en' ? 'shop/legal.en.html.twig' : 'shop/legal.html.twig');
     }
 }

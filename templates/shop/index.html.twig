@@ -1,41 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ current_category ? current_category.name : 'Catalogue' }}{% endblock %}
+{% block title %}{{ current_category ? current_category.name|trans({}, 'catalogue') : 'Catalogue'|trans }}{% endblock %}
 
 {% block body %}
-    <p class="eyebrow mb-2">{{ current_category ? 'Série ' ~ current_category.code : 'Catalogue général' }}</p>
-    <h1 class="mb-1">{{ current_category ? current_category.name : 'Toutes les pièces' }}</h1>
-    <p class="text-muted-blue mb-4">{{ total }} pièce{{ total > 1 ? 's' }} trouvée{{ total > 1 ? 's' }}</p>
+    <p class="eyebrow mb-2">{{ current_category ? 'Série %code%'|trans({'%code%': current_category.code}) : 'Catalogue général'|trans }}</p>
+    <h1 class="mb-1">{{ current_category ? current_category.name|trans({}, 'catalogue') : 'Toutes les pièces'|trans }}</h1>
+    <p class="text-muted-blue mb-4">{{ '%count% pièce trouvée|%count% pièces trouvées'|trans({'%count%': total}) }}</p>
 
     <form method="get" class="panel mb-5">
         <div class="row g-3 align-items-end">
             <div class="col-12 col-md-4">
-                <label for="q" class="form-label">Recherche</label>
-                <input type="search" id="q" name="q" value="{{ query }}" class="form-control" placeholder="dragon, robot, bronze…">
+                <label for="q" class="form-label">{{ 'Recherche'|trans }}</label>
+                <input type="search" id="q" name="q" value="{{ query }}" class="form-control" placeholder="{{ 'dragon, robot, bronze…'|trans }}">
             </div>
             <div class="col-6 col-md-3">
-                <label for="categorie" class="form-label">Série</label>
+                <label for="categorie" class="form-label">{{ 'Série'|trans }}</label>
                 <select id="categorie" name="categorie" class="form-select">
-                    <option value="">Toutes</option>
+                    <option value="">{{ 'Toutes'|trans }}</option>
                     {% for item in categories %}
-                        <option value="{{ item.category.slug }}" {{ current_category and current_category.id == item.category.id ? 'selected' }}>{{ item.category.code }} · {{ item.category.name }}</option>
+                        <option value="{{ item.category.slug }}" {{ current_category and current_category.id == item.category.id ? 'selected' }}>{{ item.category.code }} · {{ item.category.name|trans({}, 'catalogue') }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-6 col-md-2">
-                <label for="tri" class="form-label">Tri</label>
+                <label for="tri" class="form-label">{{ 'Tri'|trans }}</label>
                 <select id="tri" name="tri" class="form-select">
                     {% for value, label in {'nouveautes': 'Nouveautés', 'prix-croissant': 'Prix ↑', 'prix-decroissant': 'Prix ↓', 'nom': 'Nom'} %}
-                        <option value="{{ value }}" {{ sort == value ? 'selected' }}>{{ label }}</option>
+                        <option value="{{ value }}" {{ sort == value ? 'selected' }}>{{ label|trans }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-12 col-md-3 d-flex gap-3 align-items-center">
                 <div class="form-check me-auto">
                     <input class="form-check-input" type="checkbox" id="dispo" name="dispo" value="1" {{ in_stock ? 'checked' }}>
-                    <label class="form-check-label small" for="dispo">En stock</label>
+                    <label class="form-check-label small" for="dispo">{{ 'En stock'|trans }}</label>
                 </div>
-                <button class="btn btn-primary">Filtrer</button>
+                <button class="btn btn-primary">{{ 'Filtrer'|trans }}</button>
             </div>
         </div>
     </form>
@@ -48,9 +48,9 @@
         </div>
     {% else %}
         <div class="panel text-center py-5">
-            <p class="display fs-3 mb-2">Aucune pièce</p>
-            <p class="text-muted-blue">Rien ne correspond à cette recherche.</p>
-            <a href="{{ path('app_shop') }}" class="btn btn-outline-light">Tout le catalogue</a>
+            <p class="display fs-3 mb-2">{{ 'Aucune pièce'|trans }}</p>
+            <p class="text-muted-blue">{{ 'Rien ne correspond à cette recherche.'|trans }}</p>
+            <a href="{{ path('app_shop') }}" class="btn btn-outline-light">{{ 'Tout le catalogue'|trans }}</a>
         </div>
     {% endif %}
 

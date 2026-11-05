@@ -13,6 +13,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+use function Symfony\Component\Translation\t;
+
 final class SecurityController extends AbstractController
 {
     #[Route('/connexion', name: 'app_login')]
@@ -49,7 +51,7 @@ final class SecurityController extends AbstractController
             $user->setPassword($hasher->hashPassword($user, $form->get('plainPassword')->getData()));
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success', 'Bienvenue sur Figurama !');
+            $this->addFlash('success', t('Bienvenue sur Figurama !'));
 
             // Keeps the cart: the session is not lost when logging in.
             return $security->login($user, 'form_login', 'main') ?? $this->redirectToRoute('app_home');

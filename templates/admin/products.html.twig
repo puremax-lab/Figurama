@@ -1,30 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Pièces{% endblock %}
+{% block title %}{{ 'Pièces'|trans }}{% endblock %}
 
 {% block body %}
     <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
-        <div><p class="eyebrow mb-2">Back-office</p><h1 class="mb-0">Pièces</h1></div>
-        <a href="{{ path('admin_product_new') }}" class="btn btn-primary">+ Nouvelle pièce</a>
+        <div><p class="eyebrow mb-2">{{ 'Back-office'|trans }}</p><h1 class="mb-0">{{ 'Pièces'|trans }}</h1></div>
+        <a href="{{ path('admin_product_new') }}" class="btn btn-primary">{{ '+ Nouvelle pièce'|trans }}</a>
     </div>
     {{ include('admin/_nav.html.twig') }}
 
     <div class="panel p-0">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
-                <thead><tr><th class="ps-3">Réf.</th><th>Pièce</th><th>Série</th><th class="text-end">Prix</th><th class="text-end">Stock</th><th class="pe-3">État</th></tr></thead>
+                <thead><tr><th class="ps-3">{{ 'Réf.'|trans }}</th><th>{{ 'Pièce'|trans }}</th><th>{{ 'Série'|trans }}</th><th class="text-end">{{ 'Prix'|trans }}</th><th class="text-end">{{ 'Stock'|trans }}</th><th class="pe-3">{{ 'État'|trans }}</th></tr></thead>
                 <tbody>
                     {% for product in products %}
                         <tr>
                             <td class="ps-3 text-muted-blue">{{ product.reference }}</td>
-                            <td><a href="{{ path('admin_product_edit', {id: product.id}) }}">{{ product.name }}</a></td>
-                            <td>{{ product.category.name }}</td>
+                            <td><a href="{{ path('admin_product_edit', {id: product.id}) }}">{{ product.name|trans({}, 'catalogue') }}</a></td>
+                            <td>{{ product.category.name|trans({}, 'catalogue') }}</td>
                             <td class="text-end text-nowrap">{{ product.priceCents|price }}</td>
                             <td class="text-end {{ product.stock <= 3 ? 'text-danger fw-semibold' }}">{{ product.stock }}</td>
                             <td class="pe-3">
-                                {% if not product.active %}<span class="status status-cancelled">Masquée</span>
-                                {% elseif product.featured %}<span class="status status-pending">En avant</span>
-                                {% else %}<span class="status status-paid">En vente</span>{% endif %}
+                                {% if not product.active %}<span class="status status-cancelled">{{ 'Masquée'|trans }}</span>
+                                {% elseif product.featured %}<span class="status status-pending">{{ 'En avant'|trans }}</span>
+                                {% else %}<span class="status status-paid">{{ 'En vente'|trans }}</span>{% endif %}
                             </td>
                         </tr>
                     {% endfor %}

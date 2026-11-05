@@ -234,6 +234,10 @@ a { text-underline-offset: 3px; }
 .announce { background: var(--yellow); color: var(--black); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 .announce-inner { display: flex; justify-content: center; gap: 2rem; padding: .45rem 0; }
 .announce-inner span + span::before { content: '✦'; margin-right: 2rem; }
+.announce .lang-switch { position: absolute; right: .75rem; top: 50%; transform: translateY(-50%); display: flex; gap: .15rem; }
+.announce .lang-switch a { color: var(--black); text-decoration: none; padding: .05rem .3rem; }
+.announce .lang-switch a.active { background: var(--black); color: var(--yellow); }
+.announce-inner { position: relative; }
 .header-search .form-control { min-width: 230px; }
 
 .stars { color: var(--yellow); letter-spacing: .08em; }

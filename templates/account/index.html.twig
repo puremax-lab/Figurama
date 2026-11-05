@@ -1,27 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon compte{% endblock %}
+{% block title %}{{ 'Mon compte'|trans }}{% endblock %}
 
 {% block body %}
-    <p class="eyebrow mb-2">Compte client · {{ app.user.email }}</p>
-    <h1 class="mb-4">Bonjour {{ app.user.firstName }}</h1>
+    <p class="eyebrow mb-2">{{ 'Compte client · %email%'|trans({'%email%': app.user.email}) }}</p>
+    <h1 class="mb-4">{{ 'Bonjour %name%'|trans({'%name%': app.user.firstName}) }}</h1>
 
-    <h2 class="section-title"><span class="num">01</span> Mes commandes</h2>
+    <h2 class="section-title"><span class="num">01</span> {{ 'Mes commandes'|trans }}</h2>
     {% if orders is empty %}
         <div class="panel text-center py-4">
-            <p class="text-muted-blue mb-3">Vous n'avez pas encore passé de commande.</p>
-            <a href="{{ path('app_shop') }}" class="btn btn-primary">Ouvrir le catalogue</a>
+            <p class="text-muted-blue mb-3">{{ "Vous n'avez pas encore passé de commande."|trans }}</p>
+            <a href="{{ path('app_shop') }}" class="btn btn-primary">{{ 'Ouvrir le catalogue'|trans }}</a>
         </div>
     {% else %}
         <div class="panel p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead><tr><th class="ps-3">Référence</th><th>Date</th><th>Pièces</th><th>Total</th><th class="pe-3">Statut</th></tr></thead>
+                    <thead><tr><th class="ps-3">{{ 'Référence'|trans }}</th><th>{{ 'Date'|trans }}</th><th>{{ 'Pièces'|trans }}</th><th>{{ 'Total'|trans }}</th><th class="pe-3">{{ 'Statut'|trans }}</th></tr></thead>
                     <tbody>
                         {% for order in orders %}
                             <tr>
                                 <td class="ps-3"><a href="{{ path('app_account_order', {reference: order.reference}) }}">{{ order.reference }}</a></td>
-                                <td class="text-nowrap">{{ order.createdAt|format_date('medium', locale: 'fr') }}</td>
+                                <td class="text-nowrap">{{ order.createdAt|format_date('medium', locale: app.request.locale) }}</td>
                                 <td>{{ order.itemCount }}</td>
                                 <td class="text-nowrap">{{ order.totalCents|price }}</td>
                                 <td class="pe-3">{{ include('_partials/_status.html.twig', {status: order.status}) }}</td>

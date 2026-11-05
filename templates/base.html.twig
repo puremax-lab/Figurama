@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="fr" data-bs-theme="dark">
+<html lang="{{ app.request.locale }}" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Figurines à l'échelle{% endblock %} · Figurama</title>
-    <meta name="description" content="{% block description %}Figurama, atelier de figurines de collection : chaque pièce est référencée, mesurée et peinte à la main.{% endblock %}">
+    <title>{% block title %}{{ "Figurines à l'échelle"|trans }}{% endblock %} · Figurama</title>
+    <meta name="description" content="{% block description %}{{ 'Figurama, atelier de figurines de collection : chaque pièce est référencée, mesurée et peinte à la main.'|trans }}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Figurama">
     <meta property="og:title" content="{{ block('title') }} · Figurama">
@@ -25,45 +25,50 @@
 <body class="d-flex flex-column min-vh-100">
 <div class="announce">
     <div class="container announce-inner">
-        <span>Livraison offerte BE · FR · LU · NL</span>
-        <span class="d-none d-sm-inline">Retour gratuit 30 jours</span>
-        <span class="d-none d-md-inline">Paiement sécurisé Stripe</span>
-        <span class="d-none d-lg-inline">Expédition sous 48 h</span>
+        <span>{{ 'Livraison offerte BE · FR · LU · NL'|trans }}</span>
+        <span class="d-none d-sm-inline">{{ 'Retour gratuit 30 jours'|trans }}</span>
+        <span class="d-none d-md-inline">{{ 'Paiement sécurisé Stripe'|trans }}</span>
+        <span class="d-none d-lg-inline">{{ 'Expédition sous 48 h'|trans }}</span>
+        <div class="lang-switch" role="group" aria-label="{{ 'Langue'|trans }}">
+            {% for locale in ['fr', 'en'] %}
+                <a href="{{ path('app_locale', {locale: locale}) }}" lang="{{ locale }}" {{ app.request.locale == locale ? 'class="active" aria-current="true"' }}>{{ locale|upper }}</a>
+            {% endfor %}
+        </div>
     </div>
 </div>
 <nav class="navbar navbar-expand-md topbar py-3">
     <div class="container">
-        <a class="brand me-4" href="{{ path('app_home') }}">FIGURAMA<small>FIGURINES DE COLLECTION · PEINTES À LA MAIN</small></a>
-        <a href="{{ path('app_cart') }}" class="btn btn-primary btn-sm ms-auto me-3 d-md-none" data-cart-open>Bon [<span data-cart-count>{{ cart_count() }}</span>]</a>
+        <a class="brand me-4" href="{{ path('app_home') }}">FIGURAMA<small>{{ 'FIGURINES DE COLLECTION · PEINTES À LA MAIN'|trans }}</small></a>
+        <a href="{{ path('app_cart') }}" class="btn btn-primary btn-sm ms-auto me-3 d-md-none" data-cart-open>{{ 'Bon'|trans }} [<span data-cart-count>{{ cart_count() }}</span>]</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link {{ app.current_route == 'app_shop' ? 'active' }}" href="{{ path('app_shop') }}">Catalogue</a></li>
+                <li class="nav-item"><a class="nav-link {{ app.current_route == 'app_shop' ? 'active' }}" href="{{ path('app_shop') }}">{{ 'Catalogue'|trans }}</a></li>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item"><a class="nav-link {{ app.current_route starts with 'admin' ? 'active' }}" href="{{ path('admin_dashboard') }}">Gestion</a></li>
+                    <li class="nav-item"><a class="nav-link {{ app.current_route starts with 'admin' ? 'active' }}" href="{{ path('admin_dashboard') }}">{{ 'Gestion'|trans }}</a></li>
                 {% endif %}
             </ul>
             <form action="{{ path('app_shop') }}" method="get" class="header-search my-3 my-md-0 me-md-3" role="search">
-                <label for="header-q" class="visually-hidden">Rechercher une figurine</label>
-                <input type="search" id="header-q" name="q" value="{{ app.request.query.get('q') }}" class="form-control form-control-sm" placeholder="Rechercher : dragon, robot…">
+                <label for="header-q" class="visually-hidden">{{ 'Rechercher une figurine'|trans }}</label>
+                <input type="search" id="header-q" name="q" value="{{ app.request.query.get('q') }}" class="form-control form-control-sm" placeholder="{{ 'Rechercher : dragon, robot…'|trans }}">
             </form>
             <ul class="navbar-nav align-items-md-center gap-md-3">
                 {% if app.user %}
-                    <li class="nav-item"><a class="nav-link {{ app.current_route starts with 'app_account' ? 'active' }}" href="{{ path('app_account') }}">Compte : {{ app.user.firstName }}</a></li>
+                    <li class="nav-item"><a class="nav-link {{ app.current_route starts with 'app_account' ? 'active' }}" href="{{ path('app_account') }}">{{ 'Compte : %name%'|trans({'%name%': app.user.firstName}) }}</a></li>
                     <li class="nav-item">
                         <form method="post" action="{{ path('app_logout') }}">
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
-                            <button class="btn btn-link nav-link px-0">Déconnexion</button>
+                            <button class="btn btn-link nav-link px-0">{{ 'Déconnexion'|trans }}</button>
                         </form>
                     </li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">Inscription</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">{{ 'Connexion'|trans }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">{{ 'Inscription'|trans }}</a></li>
                 {% endif %}
                 <li class="nav-item d-none d-md-block">
-                    <a href="{{ path('app_cart') }}" class="btn btn-primary btn-sm" data-cart-open>Bon de commande [<span data-cart-count>{{ cart_count() }}</span>]</a>
+                    <a href="{{ path('app_cart') }}" class="btn btn-primary btn-sm" data-cart-open>{{ 'Bon de commande'|trans }} [<span data-cart-count>{{ cart_count() }}</span>]</a>
                 </li>
             </ul>
         </div>
@@ -74,7 +79,7 @@
     <div class="container">
         {% for type, messages in app.flashes %}
             {% for message in messages %}
-                <div class="alert alert-{{ type }}" role="status">{{ message }}</div>
+                <div class="alert alert-{{ type }}" role="status">{{ message|trans }}</div>
             {% endfor %}
         {% endfor %}
         {% block body %}{% endblock %}
@@ -85,14 +90,14 @@
     <div class="container py-4 d-flex flex-column flex-md-row justify-content-between gap-3">
         <div>
             <a class="footer-brand" href="{{ path('app_home') }}">FIGURAMA</a>
-            <p class="mb-0 mt-1">PROJET PORTFOLIO DE PUREMAX-LAB</p>
-            <p class="mb-0">BOUTIQUE DE DÉMONSTRATION · AUCUN COLIS N'EST EXPÉDIÉ · PHOTOS UNSPLASH</p>
+            <p class="mb-0 mt-1">{{ 'PROJET PORTFOLIO DE PUREMAX-LAB'|trans }}</p>
+            <p class="mb-0">{{ "BOUTIQUE DE DÉMONSTRATION · AUCUN COLIS N'EST EXPÉDIÉ · PHOTOS UNSPLASH"|trans }}</p>
         </div>
-        <nav class="footer-links d-flex flex-wrap align-items-md-end gap-3" aria-label="Liens du pied de page">
-            <a href="{{ path('app_shop') }}">Catalogue</a>
-            <a href="https://github.com/puremax-lab/Figurama" target="_blank" rel="noopener">Code source ↗</a>
+        <nav class="footer-links d-flex flex-wrap align-items-md-end gap-3" aria-label="{{ 'Liens du pied de page'|trans }}">
+            <a href="{{ path('app_shop') }}">{{ 'Catalogue'|trans }}</a>
+            <a href="https://github.com/puremax-lab/Figurama" target="_blank" rel="noopener">{{ 'Code source ↗'|trans }}</a>
             <a href="https://github.com/puremax-lab" target="_blank" rel="noopener">GitHub puremax-lab ↗</a>
-            <a href="{{ path('app_legal') }}">Mentions légales</a>
+            <a href="{{ path('app_legal') }}">{{ 'Mentions légales'|trans }}</a>
             <span>© {{ 'now'|date('Y') }}</span>
         </nav>
     </div>
@@ -100,8 +105,8 @@
 {# Side drawer filled by assets/app.js after a quick add #}
 <aside class="offcanvas offcanvas-end cart-drawer" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerTitle" data-url="{{ path('app_cart_drawer') }}">
     <div class="offcanvas-header">
-        <h2 class="offcanvas-title" id="cartDrawerTitle">Bon de commande</h2>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+        <h2 class="offcanvas-title" id="cartDrawerTitle">{{ 'Bon de commande'|trans }}</h2>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="{{ 'Fermer'|trans }}"></button>
     </div>
     <p class="cart-drawer-message" data-cart-message role="status"></p>
     <div class="offcanvas-body" data-cart-drawer-body></div>

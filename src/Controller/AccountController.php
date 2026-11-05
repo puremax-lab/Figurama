@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
+use function Symfony\Component\Translation\t;
+
 #[Route('/compte')]
 final class AccountController extends AbstractController
 {
@@ -42,7 +44,7 @@ final class AccountController extends AbstractController
         }
         if ($order->getStatus() === OrderStatus::Pending) {
             $workflow->changeStatus($order, OrderStatus::Cancelled);
-            $this->addFlash('success', 'Commande annulée.');
+            $this->addFlash('success', t('Commande annulée.'));
         }
 
         return $this->redirectToRoute('app_account_order', ['reference' => $order->getReference()]);

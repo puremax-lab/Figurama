@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Erreur {{ status_code }}{% endblock %}
+{% block title %}{{ 'Erreur %code%'|trans({'%code%': status_code}) }}{% endblock %}
 
 {% block body %}
     <div class="text-center py-5 position-relative">
         <p class="display" style="font-size: clamp(5rem, 20vw, 10rem); line-height: 1">{{ status_code }}</p>
         <p class="mb-4"><span class="sticker sticker-red sticker-big">
-            {% if status_code == 404 %}Pièce introuvable{% elseif status_code == 403 %}Accès refusé{% else %}Erreur{% endif %}
+            {% if status_code == 404 %}{{ 'Pièce introuvable'|trans }}{% elseif status_code == 403 %}{{ 'Accès refusé'|trans }}{% else %}{{ 'Erreur'|trans }}{% endif %}
         </span></p>
-        <p class="text-muted-blue">{{ status_code == 404 ? 'Cette page n\'existe pas ou a été retirée du catalogue.' : 'Réessayez dans un instant.' }}</p>
-        <a href="{{ path('app_home') }}" class="btn btn-primary mt-2">Retour à l'accueil</a>
+        <p class="text-muted-blue">{{ status_code == 404 ? "Cette page n'existe pas ou a été retirée du catalogue."|trans : 'Réessayez dans un instant.'|trans }}</p>
+        <a href="{{ path('app_home') }}" class="btn btn-primary mt-2">{{ "Retour à l'accueil"|trans }}</a>
     </div>
 {% endblock %}

@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.name }}{% endblock %}
-{% block description %}{{ product.description|length > 155 ? product.description|slice(0, 154) ~ '…' : product.description }}{% endblock %}
+{% block title %}{{ product.name|trans({}, 'catalogue') }}{% endblock %}
+{% block description %}{% set text = product.description|trans({}, 'catalogue') %}{{ text|length > 155 ? text|slice(0, 154) ~ '…' : text }}{% endblock %}
 
 {% block body %}
     {% set stats = rating(product) %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ path('app_shop') }}">Catalogue</a></li>
-            <li class="breadcrumb-item"><a href="{{ path('app_shop', {categorie: product.category.slug}) }}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_shop') }}">{{ 'Catalogue'|trans }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_shop', {categorie: product.category.slug}) }}">{{ product.category.name|trans({}, 'catalogue') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ product.reference }}</li>
         </ol>
     </nav>
@@ -16,108 +16,108 @@
     <div class="row g-4 g-lg-5 mb-5">
         <div class="col-md-6">
             <div class="plate plate-photo">
-                <header class="plate-head"><span>{{ product.reference }}</span><span>VUE DE FACE</span></header>
+                <header class="plate-head"><span>{{ product.reference }}</span><span>{{ 'VUE DE FACE'|trans }}</span></header>
                 <div class="figure-photo">
-                    <img src="{{ product.imageUrl|replace({'w=900': 'w=1200'}) }}" alt="{{ product.name }}" width="900" height="900">
+                    <img src="{{ product.imageUrl|replace({'w=900': 'w=1200'}) }}" alt="{{ product.name|trans({}, 'catalogue') }}" width="900" height="900">
                     <div class="dim-v" aria-hidden="true"><span>{{ product.heightCm }} cm</span></div>
-                    {% if product.stock == 0 %}<span class="stamp">Épuisé</span>{% endif %}
+                    {% if product.stock == 0 %}<span class="stamp">{{ 'Épuisé'|trans }}</span>{% endif %}
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <p class="eyebrow mb-2">Série {{ product.category.code }} · {{ product.category.name }}</p>
-            <h1>{{ product.name }}</h1>
+            <p class="eyebrow mb-2">{{ 'Série %code%'|trans({'%code%': product.category.code}) }} · {{ product.category.name|trans({}, 'catalogue') }}</p>
+            <h1>{{ product.name|trans({}, 'catalogue') }}</h1>
             <a href="#avis" class="rating-summary">
                 {% if stats %}
                     <span class="stars" aria-hidden="true">{{ stats.average|stars }}</span>
-                    <span>{{ stats.average|number_format(1, ',') }} / 5 · {{ stats.count }} avis vérifié{{ stats.count > 1 ? 's' }}</span>
+                    <span>{{ '%rating% / 5 · %count% avis vérifié|%rating% / 5 · %count% avis vérifiés'|trans({'%rating%': stats.average|decimal, '%count%': stats.count}) }}</span>
                 {% else %}
-                    <span>Pas encore d'avis</span>
+                    <span>{{ "Pas encore d'avis"|trans }}</span>
                 {% endif %}
             </a>
             <p class="my-4"><span class="sticker sticker-big">{{ product.priceCents|price }}</span></p>
-            <p>{{ product.description }}</p>
+            <p>{{ product.description|trans({}, 'catalogue') }}</p>
 
             {% if product.available %}
                 <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="d-flex flex-wrap gap-3 align-items-end my-4" id="buy-form" data-cart-add>
                     <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
                     <div>
-                        <label for="quantity" class="form-label">Quantité</label>
+                        <label for="quantity" class="form-label">{{ 'Quantité'|trans }}</label>
                         <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ min(product.stock, 10) }}" class="form-control qty-input">
                     </div>
-                    <button class="btn btn-primary btn-lg flex-grow-1">Ajouter au bon de commande</button>
+                    <button class="btn btn-primary btn-lg flex-grow-1">{{ 'Ajouter au bon de commande'|trans }}</button>
                 </form>
                 <p class="stock-line">
-                    {% if product.lowStock %}<span class="sticker sticker-red">Plus que {{ product.stock }}</span>{% else %}<span class="dot-ok"></span> En stock, expédié sous 48 h{% endif %}
+                    {% if product.lowStock %}<span class="sticker sticker-red">{{ 'Plus que %count%'|trans({'%count%': product.stock}) }}</span>{% else %}<span class="dot-ok"></span> {{ 'En stock, expédié sous 48 h'|trans }}{% endif %}
                 </p>
             {% else %}
-                <p class="text-muted-blue my-4">Cette pièce reviendra bientôt en stock.</p>
+                <p class="text-muted-blue my-4">{{ 'Cette pièce reviendra bientôt en stock.'|trans }}</p>
             {% endif %}
 
             <ul class="trust-list">
-                <li>Livraison offerte en BE, FR, LU et NL</li>
-                <li>Retour gratuit pendant 30 jours</li>
-                <li>Paiement sécurisé par Stripe</li>
+                <li>{{ 'Livraison offerte en BE, FR, LU et NL'|trans }}</li>
+                <li>{{ 'Retour gratuit pendant 30 jours'|trans }}</li>
+                <li>{{ 'Paiement sécurisé par Stripe'|trans }}</li>
             </ul>
 
             <div class="cartouche my-4">
-                <div class="cartouche-head"><span>Fiche technique</span><span>{{ product.reference }}</span></div>
+                <div class="cartouche-head"><span>{{ 'Fiche technique'|trans }}</span><span>{{ product.reference }}</span></div>
                 <dl>
-                    <dt>Hauteur</dt><dd>{{ product.heightCm }} cm</dd>
-                    <dt>Échelle</dt><dd>{{ product.scale }}</dd>
-                    <dt>Matière</dt><dd>{{ product.material }}</dd>
-                    <dt>Stock</dt><dd>{{ product.stock == 0 ? 'épuisé' : product.stock ~ ' pièce' ~ (product.stock > 1 ? 's') }}</dd>
+                    <dt>{{ 'Hauteur'|trans }}</dt><dd>{{ product.heightCm }} cm</dd>
+                    <dt>{{ 'Échelle'|trans }}</dt><dd>{{ product.scale }}</dd>
+                    <dt>{{ 'Matière'|trans }}</dt><dd>{{ product.material|trans({}, 'catalogue') }}</dd>
+                    <dt>{{ 'Stock'|trans }}</dt><dd>{{ product.stock == 0 ? 'épuisé'|trans : '%count% pièce|%count% pièces'|trans({'%count%': product.stock}) }}</dd>
                 </dl>
             </div>
         </div>
     </div>
 
     <section id="avis" class="mb-5">
-        <h2 class="section-title"><span class="num">★</span> Avis des clients</h2>
+        <h2 class="section-title"><span class="num">★</span> {{ 'Avis des clients'|trans }}</h2>
         <div class="row g-4">
             <div class="col-lg-4">
                 <div class="cartouche">
-                    <div class="cartouche-head"><span>Note moyenne</span><span>{{ stats ? stats.count : 0 }} avis</span></div>
+                    <div class="cartouche-head"><span>{{ 'Note moyenne'|trans }}</span><span>{{ '%count% avis'|trans({'%count%': stats ? stats.count : 0}) }}</span></div>
                     <div class="p-3 text-center">
                         {% if stats %}
-                            <p class="display fs-1 mb-0">{{ stats.average|number_format(1, ',') }}<small class="fs-5"> / 5</small></p>
+                            <p class="display fs-1 mb-0">{{ stats.average|decimal }}<small class="fs-5"> / 5</small></p>
                             <p class="stars fs-4 mb-0" aria-hidden="true">{{ stats.average|stars }}</p>
                         {% else %}
-                            <p class="text-muted-blue mb-0">Aucun avis pour l'instant.</p>
+                            <p class="text-muted-blue mb-0">{{ "Aucun avis pour l'instant."|trans }}</p>
                         {% endif %}
-                        <p class="small text-muted-blue mt-3 mb-0">Seuls les clients qui ont reçu cette pièce peuvent la noter.</p>
+                        <p class="small text-muted-blue mt-3 mb-0">{{ 'Seuls les clients qui ont reçu cette pièce peuvent la noter.'|trans }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-8">
                 {% if review_form %}
                     <div class="panel mb-4">
-                        <h3 class="fs-5 mb-3">Donner votre avis</h3>
+                        <h3 class="fs-5 mb-3">{{ 'Donner votre avis'|trans }}</h3>
                         {{ form_start(review_form, {attr: {novalidate: 'novalidate'}}) }}
                             {{ form_row(review_form.rating) }}
                             {{ form_row(review_form.comment) }}
-                            <button class="btn btn-primary">Publier mon avis</button>
+                            <button class="btn btn-primary">{{ 'Publier mon avis'|trans }}</button>
                         {{ form_end(review_form) }}
                     </div>
                 {% endif %}
                 {% for review in reviews %}
                     <article class="review">
                         <header>
-                            <span class="stars" aria-label="{{ review.rating }} sur 5">{{ review.rating|stars }}</span>
+                            <span class="stars" aria-label="{{ '%rating% sur 5'|trans({'%rating%': review.rating}) }}">{{ review.rating|stars }}</span>
                             <strong>{{ review.author.firstName }} {{ review.author.lastName|first }}.</strong>
-                            <span class="text-muted-blue">· {{ review.createdAt|format_date('medium', locale: 'fr') }} · achat vérifié</span>
+                            <span class="text-muted-blue">· {{ review.createdAt|format_date('medium', locale: app.request.locale) }} · {{ 'achat vérifié'|trans }}</span>
                         </header>
-                        <p>{{ review.comment }}</p>
+                        <p>{{ review.comment|trans({}, 'catalogue') }}</p>
                     </article>
                 {% else %}
-                    <p class="text-muted-blue">Soyez le premier à donner votre avis après votre achat.</p>
+                    <p class="text-muted-blue">{{ 'Soyez le premier à donner votre avis après votre achat.'|trans }}</p>
                 {% endfor %}
             </div>
         </div>
     </section>
 
     {% if similar %}
-        <h2 class="section-title"><span class="num">+</span> Même série</h2>
+        <h2 class="section-title"><span class="num">+</span> {{ 'Même série'|trans }}</h2>
         <div class="row row-cols-2 row-cols-lg-4 g-4">
             {% for product in similar %}
                 <div class="col">{{ include('_partials/_product_card.html.twig') }}</div>
@@ -129,7 +129,7 @@
     {% if product.available %}
         <div class="sticky-buy d-md-none">
             <span class="sticker">{{ product.priceCents|price }}</span>
-            <button type="submit" form="buy-form" class="btn btn-primary flex-grow-1">Ajouter</button>
+            <button type="submit" form="buy-form" class="btn btn-primary flex-grow-1">{{ 'Ajouter'|trans }}</button>
         </div>
     {% endif %}
 {% endblock %}

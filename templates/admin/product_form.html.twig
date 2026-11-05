@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ is_new ? 'Nouvelle pièce' : product.name }}{% endblock %}
+{% block title %}{{ is_new ? 'Nouvelle pièce'|trans : product.name|trans({}, 'catalogue') }}{% endblock %}
 
 {% block body %}
-    <a href="{{ path('admin_products') }}" class="small">← Pièces</a>
-    <h1 class="my-3">{{ is_new ? 'Nouvelle pièce' : product.name }}</h1>
+    <a href="{{ path('admin_products') }}" class="small">{{ '← Pièces'|trans }}</a>
+    <h1 class="my-3">{{ is_new ? 'Nouvelle pièce'|trans : product.name|trans({}, 'catalogue') }}</h1>
 
     <div class="panel" style="max-width: 820px">
         {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
@@ -23,8 +23,8 @@
             {{ form_row(form.material) }}
             {{ form_row(form.featured) }}
             {{ form_row(form.active) }}
-            <button class="btn btn-primary mt-2">Enregistrer</button>
-            <a href="{{ path('admin_products') }}" class="btn btn-link mt-2">Annuler</a>
+            <button class="btn btn-primary mt-2">{{ 'Enregistrer'|trans }}</button>
+            <a href="{{ path('admin_products') }}" class="btn btn-link mt-2">{{ 'Annuler'|trans }}</a>
         {{ form_end(form) }}
     </div>
 {% endblock %}

@@ -5,7 +5,7 @@ Online shop for collectible figurines built with **Symfony 7.4**: catalogue, car
 
 ### 👉 [Try the live demo](https://puremax-lab.alwaysdata.net/figurama)
 
-Log in with `client@figurama.test` (customer) or `admin@figurama.test` (back office), password `password`. Payment runs in demo mode, no card needed.
+Log in with `client@figurama.test` (customer) or `admin@figurama.test` (back office), password `password`. Payment runs in demo mode, no card needed. The shop is in French by default: click **EN** at the top right for English.
 
 ![Symfony](https://img.shields.io/badge/Symfony-7.4_LTS-000000?logo=symfony)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
@@ -19,6 +19,8 @@ Log in with `client@figurama.test` (customer) or `admin@figurama.test` (back off
 Figurines are scale models, so the shop looks like an engineering drawing (blue grid, reference codes, dimension lines) with a touch of retro fanzine (price stickers, "sold out" stamps).
 
 ## Features
+
+**In French and English**, with a switch in the top bar (see [Two languages](#two-languages)).
 
 **Customers**
 - Search, filter by series, sort by price; more pieces load automatically while scrolling
@@ -51,7 +53,8 @@ Figurines are scale models, so the shop looks like an engineering drawing (blue 
 | Database | SQLite |
 | Front end | Bootstrap 5, plain JavaScript, AssetMapper (no Node.js build) |
 | Payment | Stripe Checkout through Symfony HttpClient |
-| Tests | 43 PHPUnit tests, run on every push with GitHub Actions |
+| Languages | French and English: session-based switch, Symfony Translator, translated demo catalogue |
+| Tests | 54 PHPUnit tests, run on every push with GitHub Actions |
 | Hosting | alwaysdata, served from a sub-folder |
 
 ## Screens
@@ -122,6 +125,17 @@ erDiagram
 
 - An order line keeps the name and price at the time of the order; it stays if the product is deleted.
 - One review per customer and product (`UNIQUE (product_id, author_id)`).
+
+## Two languages
+
+A FR / EN switch in the top bar works on every page, on a phone too, and the choice stays in the session. French is the default.
+
+- **French is the source language**: the text in the templates is the translation key, and [`translations/`](translations) holds the English version, with one file for the interface, one for validation messages and one for the demo catalogue.
+- **The 40 demo products are translated too**: names, descriptions, materials, series and reviews, in [`catalogue.en.php`](translations/catalogue.en.php). The database stays in French, so no migration was needed, and the English search looks in these texts.
+- **Prices, dates and ratings follow the language**: `24,90 €` and `€24.90`, `4,5` and `4.5`.
+- **What stays French**: a product created in the back office and a review written by a customer stay as they were typed, and the URLs stay in French. Sold products keep their name in orders, shown in English when it is a demo product. On the real Stripe page, which is off in the demo, the item names stay in French.
+
+The screenshots show the English version.
 
 ## Run it locally
 

@@ -23,8 +23,11 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    /** Products on sale matching the filters, one page at a time. */
-    public function search(?Category $category, string $query, string $sort, bool $inStockOnly, int $page, int $perPage): Paginator
+    /**
+     * Products on sale matching the filters, one page at a time.
+     * @param list<string> $texts names or descriptions that also match the query (English search)
+     */
+    public function search(?Category $category, string $query, string $sort, bool $inStockOnly, int $page, int $perPage, array $texts = []): Paginator
     {
         [$field, $direction] = self::SORTS[$sort] ?? self::SORTS['nouveautes'];
 
@@ -41,7 +44,12 @@ class ProductRepository extends ServiceEntityRepository
             $qb->andWhere('p.category = :category')->setParameter('category', $category);
         }
         if ($query !== '') {
-            $qb->andWhere('LOWER(p.name) LIKE :q OR LOWER(p.description) LIKE :q')
+            $match = 'LOWER(p.name) LIKE :q OR LOWER(p.description) LIKE :q';
+            if ($texts !== []) {
+                $match .= ' OR p.name IN (:texts) OR p.description IN (:texts)';
+                $qb->setParameter('texts', $texts);
+            }
+            $qb->andWhere($match)
                 ->setParameter('q', '%' . addcslashes(mb_strtolower($query), '%_') . '%');
         }
         if ($inStockOnly) {

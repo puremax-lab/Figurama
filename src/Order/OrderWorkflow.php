@@ -8,6 +8,7 @@ use App\Entity\OrderStatus;
 use App\Entity\User;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
+use function Symfony\Component\Translation\t;
 
 /**
  * Creates orders and moves them through their statuses.
@@ -41,7 +42,10 @@ final class OrderWorkflow
                 // Re-read the stock inside the transaction, with a lock where the database supports it.
                 $this->em->refresh($line->product, LockMode::PESSIMISTIC_WRITE);
                 if ($line->product->getStock() < $line->quantity) {
-                    throw new CheckoutException(sprintf('Il ne reste que %d « %s » en stock.', $line->product->getStock(), $line->product->getName()));
+                    throw new CheckoutException('Il ne reste que %count% « %name% » en stock.', [
+                        '%count%' => $line->product->getStock(),
+                        '%name%' => t($line->product->getName(), [], 'catalogue'),
+                    ]);
                 }
                 $line->product->decreaseStock($line->quantity);
                 $order->addItem($line->product, $line->quantity);
